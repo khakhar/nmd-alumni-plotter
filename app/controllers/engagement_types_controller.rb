@@ -1,4 +1,5 @@
 class EngagementTypesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_engagement_type, only: [:show, :edit, :update, :destroy]
 
   # GET /engagement_types

@@ -9,3 +9,5 @@
 ["Internship", "Job"].each do |name|
   EngagementType.find_or_create_by name: name
 end
+
+User.find_or_create_by_email "admin@example.com", password: "password"

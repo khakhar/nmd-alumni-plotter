@@ -1,4 +1,5 @@
 NidAlumni::Application.routes.draw do
+  devise_for :users
   root to:  "main#index"
 
   resources :expertise_areas
