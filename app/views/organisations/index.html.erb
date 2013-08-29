@@ -1,27 +1,29 @@
 <h1>Organisations</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @organisations.each do |organisation| %>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= organisation.name %></td>
-        <td><%= link_to 'Show', organisation %></td>
-        <td><%= link_to 'Edit', edit_organisation_path(organisation) %></td>
-        <td><%= link_to 'Destroy', organisation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @organisations.each do |organisation| %>
+        <tr>
+          <td><%= organisation.name %></td>
+          <td><%= link_to 'Show', organisation %></td>
+          <td><%= link_to 'Edit', edit_organisation_path(organisation) %></td>
+          <td><%= link_to 'Destroy', organisation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <br>
 
-<%= link_to 'New Organisation', new_organisation_path %>
+<%= link_to 'New Organisation', new_organisation_path, class: "btn btn-success btn" %>
