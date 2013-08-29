@@ -1,4 +1,5 @@
 class StudentsController < ApplicationController
+  layout "admin"
   before_action :authenticate_user!
   before_action :set_student, only: [:show, :edit, :update, :destroy]
 

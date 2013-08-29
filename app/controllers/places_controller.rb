@@ -1,4 +1,5 @@
 class PlacesController < ApplicationController
+  layout "admin"
   before_action :authenticate_user!
   before_action :set_place, only: [:show, :edit, :update, :destroy]
 
