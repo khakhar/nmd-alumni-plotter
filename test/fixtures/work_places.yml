@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  place_id: 1
+  organisation_id: 1
+  engagement_type_id: 1
+
+two:
+  place_id: 1
+  organisation_id: 1
+  engagement_type_id: 1
