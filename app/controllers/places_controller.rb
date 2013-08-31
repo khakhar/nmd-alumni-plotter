@@ -1,12 +1,18 @@
 class PlacesController < ApplicationController
-  layout "admin"
   before_action :authenticate_user!
   before_action :set_place, only: [:show, :edit, :update, :destroy]
+
+  def search
+    @places = Place.find_like(params[:q]).select(:name)
+    respond_to do |format|
+      format.json { render json: @places.pluck(:name).flatten }
+    end
+  end
 
   # GET /places
   # GET /places.json
   def index
-    @places = Place.all
+    @places = Place.order(:name).page params[:page]
   end
 
   # GET /places/1
@@ -30,8 +36,8 @@ class PlacesController < ApplicationController
 
     respond_to do |format|
       if @place.save
-        format.html { redirect_to @place, notice: 'Place was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @place }
+        format.html { redirect_to places_path, notice: 'Place was successfully created.' }
+        format.json { render action: 'show', status: :created, location: places_path }
       else
         format.html { render action: 'new' }
         format.json { render json: @place.errors, status: :unprocessable_entity }
@@ -44,7 +50,7 @@ class PlacesController < ApplicationController
   def update
     respond_to do |format|
       if @place.update(place_params)
-        format.html { redirect_to @place, notice: 'Place was successfully updated.' }
+        format.html { redirect_to places_path, notice: 'Place was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -71,6 +77,6 @@ class PlacesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def place_params
-      params.require(:place).permit(:name, :country)
+      params.require(:place).permit(:name, :country_code)
     end
 end

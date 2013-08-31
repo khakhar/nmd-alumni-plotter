@@ -1,31 +1,27 @@
-<h1>Places</h1>
+<h1>
+  Places
+  <%= link_to 'Add Place', new_place_path, class: "btn btn-success pull-right" %>
+</h1>
+<hr/>
 
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Country</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
+<% @places.each do |place| %>
+  <div class="well well-sm">
+    <h3><%= place.name_with_country %></h3>
 
-    <tbody>
-      <% @places.each do |place| %>
-        <tr>
-          <td><%= place.name %></td>
-          <td><%= place.country %></td>
-          <td><%= link_to 'Show', place %></td>
-          <td><%= link_to 'Edit', edit_place_path(place) %></td>
-          <td><%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+    <%= link_to(
+          "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
+          edit_place_path(place),
+          class: "btn btn-primary btn-sm")
+    %>
+    <%= link_to(
+          "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
+          place,
+          method: :delete,
+          class: "btn btn-danger btn-sm",
+          data: { confirm: 'Are you sure?' })
+    %>
 
-<br>
+  </div>
+<% end %>
 
-<%= link_to 'New Place', new_place_path, class: "btn btn-success btn" %>
+<%= paginate @places %>

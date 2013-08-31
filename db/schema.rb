@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130829065521) do
+ActiveRecord::Schema.define(version: 20130901013021) do
 
   create_table "engagement_types", force: true do |t|
     t.string   "name"
@@ -33,9 +33,11 @@ ActiveRecord::Schema.define(version: 20130829065521) do
 
   create_table "places", force: true do |t|
     t.string   "name"
-    t.string   "country"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "country_code"
+    t.text     "latitude"
+    t.text     "longitude"
   end
 
   create_table "students", force: true do |t|
@@ -61,8 +63,8 @@ ActiveRecord::Schema.define(version: 20130829065521) do
     t.datetime "updated_at"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "work_places", force: true do |t|
     t.integer  "place_id"
@@ -70,6 +72,8 @@ ActiveRecord::Schema.define(version: 20130829065521) do
     t.integer  "engagement_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "student_id"
+    t.boolean  "current"
   end
 
 end

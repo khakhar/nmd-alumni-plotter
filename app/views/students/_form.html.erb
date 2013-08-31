@@ -1,7 +1,9 @@
-<%= form_for(@student) do |f| %>
+<%= form_for(@student, class: "form-horizontal") do |f| %>
   <% if @student.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:</h2>
+      <h2>
+        <%= pluralize(@student.errors.count, "error") %> prohibited this student from being saved:
+      </h2>
 
       <ul>
       <% @student.errors.full_messages.each do |msg| %>
@@ -15,12 +17,38 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
+
   <div class="form-group">
-    <%= f.label :place_id %><br>
-    <%= f.number_field :place_id %>
+    <%= f.label :place_name %><br>
+    <%= f.text_field :place_name, class: "place_name", autocomplete: "off", spellcheck: "off" %>
+    <% if @student.persisted? %>
+      <%= f.hidden_field :place_id %>
+    <% end %>
   </div>
 
   <div class="form-group">
-    <%= f.submit class: "btn btn-default" %>
+    <%= f.label :expertise_area_id, "Area of expertise" %><br>
+    <%= f.select :expertise_area_id, ExpertiseArea.all.pluck(:name, :id) %>
+  </div>
+
+  <br/>
+  <h2>
+    Work places
+    <%= link_to_add_association('Add', f, :work_places,
+      class: "btn btn-info",
+      "data-association-insertion-node" => ".work_places",
+      "data-association-insertion-method" => "after"
+    ) %>
+  </h2>
+  <hr/>
+
+  <div class="work_places">
+    <%= f.fields_for :work_places do |work_place| %>
+      <%= render 'work_place_fields', :f => work_place %>
+    <% end %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-success btn-lg" %>
   </div>
 <% end %>

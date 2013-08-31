@@ -1,0 +1,9 @@
+#= require jquery
+#= require jquery_ujs
+#= require typeahead
+#= require leaflet
+#= require cocoon
+#= require bootstrap
+#= require map_view
+#= require init
+#= require_tree .

@@ -1,0 +1,40 @@
+//= require_self
+//= require bootstrap
+//= require bootstrap-theme
+//= require leaflet
+//= require typeahead-bootstrap
+//= require_tree .
+ 
+
+.panel h3, .well-sm h3 {
+  margin-top: 0px;
+}
+
+#map { height: 525px; }
+
+.marker-popup {
+  .leaflet-popup-content-wrapper {
+    border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+
+    .student_name {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .expertise_area {
+      color: #CCC;
+    }
+
+    .popup-field {
+      margin-top: 1em;
+      color: #999;
+      text-transform: uppercase;
+    }
+
+    .popup-field-value {
+      color: #666;
+      text-transform: none;
+    }
+  }
+}

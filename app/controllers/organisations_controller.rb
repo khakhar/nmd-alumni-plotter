@@ -1,12 +1,19 @@
 class OrganisationsController < ApplicationController
-  layout "admin"
   before_action :authenticate_user!
   before_action :set_organisation, only: [:show, :edit, :update, :destroy]
+
+
+  def search
+    @organisations = Organisation.find_like(params[:q]).select(:name)
+    respond_to do |format|
+      format.json { render json: @organisations.pluck(:name).flatten }
+    end
+  end
 
   # GET /organisations
   # GET /organisations.json
   def index
-    @organisations = Organisation.all
+    @organisations = Organisation.order(:name).page params[:page]
   end
 
   # GET /organisations/1

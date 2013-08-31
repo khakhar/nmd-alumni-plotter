@@ -1,13 +1,28 @@
 NidAlumni::Application.routes.draw do
-  resources :organisations
 
   devise_for :users
   root to:  "main#index"
 
   resources :expertise_areas
   resources :engagement_types
-  resources :places
-  resources :students
+
+  resources :organisations do
+    collection do
+      get :search
+    end
+  end
+
+  resources :places do
+    collection do
+      get :search
+    end
+  end
+
+  resources :students do
+    collection do
+      get :search
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

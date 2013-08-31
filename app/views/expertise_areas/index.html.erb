@@ -1,27 +1,23 @@
-<h1>Areas of expertise</h1>
+<h1>
+  Areas of expertise
+  <%= link_to 'Add area of expertise', new_expertise_area_path, class: "btn btn-success pull-right" %>
+</h1>
+<hr/>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @expertise_areas.each do |expertise_area| %>
-      <tr>
-        <td><%= expertise_area.name %></td>
-        <td><%= link_to 'Show', expertise_area %></td>
-        <td><%= link_to 'Edit', edit_expertise_area_path(expertise_area) %></td>
-        <td><%= link_to 'Destroy', expertise_area, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New area of expertise', new_expertise_area_path %>
+<% @expertise_areas.each do |expertise_area| %>
+  <div class="well well-sm">
+    <h3><%= expertise_area.name %></h3>
+    <%= link_to(
+      "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
+      edit_expertise_area_path(expertise_area),
+      class: "btn btn-primary btn-sm")
+    %>
+    <%= link_to(
+          "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
+          expertise_area,
+          class: "btn btn-danger btn-sm",
+          method: :delete, data: { confirm: 'Are you sure?' }
+        )
+    %>
+  </div>
+<% end %>

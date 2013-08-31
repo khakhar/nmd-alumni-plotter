@@ -1,31 +1,24 @@
-<h1>Engagement types</h1>
+<h1>
+  Engagement types
+  <%= link_to 'Add engagement type', new_engagement_type_path, class: "btn btn-success pull-right" %>
+</h1>
+<hr/>
 
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
+<% @engagement_types.each do |engagement_type| %>
+  <div class="well well-sm">
+    <h3><%= engagement_type.name %></h3>
 
-    <tbody>
-      <% @engagement_types.each do |engagement_type| %>
-        <tr>
-          <td><%= engagement_type.name %></td>
-          <td><%= link_to 'Edit', edit_engagement_type_path(engagement_type), class: "btn btn-primary btn" %></td>
-          <td><%= link_to('Destroy', engagement_type,
-                method: :delete,
-                class: "btn btn-danger btn",
-                data: { confirm: 'Are you sure?' }) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+    <%= link_to(
+      "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
+      edit_engagement_type_path(engagement_type), class: "btn btn-primary btn-sm"
+    ) %>
 
-<br>
-
-<%= link_to 'Add engagement type', new_engagement_type_path, class: "btn btn-success btn" %>
+    <%= link_to(
+      "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
+      engagement_type,
+      method: :delete,
+      class: "btn btn-danger btn-sm",
+      data: { confirm: 'Are you sure?' }
+    ) %>
+  </div>
+<% end %>

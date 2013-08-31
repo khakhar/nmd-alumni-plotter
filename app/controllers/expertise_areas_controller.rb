@@ -1,5 +1,4 @@
 class ExpertiseAreasController < ApplicationController
-  layout "admin"
   before_action :authenticate_user!
   before_action :set_expertise_area, only: [:show, :edit, :update, :destroy]
 

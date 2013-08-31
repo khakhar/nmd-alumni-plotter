@@ -7,7 +7,7 @@
 
 <p>
   <strong>Place:</strong>
-  <%= @student.place_id %>
+  <%= @student.place.try(:name_with_country) %>
 </p>
 
 <%= link_to 'Edit', edit_student_path(@student) %> |

@@ -1,12 +1,31 @@
 class StudentsController < ApplicationController
-  layout "admin"
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :search
   before_action :set_student, only: [:show, :edit, :update, :destroy]
+
+  def search
+    expertise_filter = params[:expertise] || "all"
+    if expertise_filter == "all"
+      @students = Student.includes(:expertise_area, :place).load
+    else
+      @students = Student.includes(:expertise_area, :place).where(expertise_area_id: expertise_filter)
+    end
+
+    respond_to do |format|
+      format.json do
+        render text: @students.to_json(include: {
+          expertise_area: {},
+          place: {},
+          internship: {include: [:organisation, :place]},
+          current_work_place: {include: [:organisation, :place]}
+        })
+      end
+    end
+  end
 
   # GET /students
   # GET /students.json
   def index
-    @students = Student.all
+    @students = Student.order(:name).page params[:page]
   end
 
   # GET /students/1
@@ -42,6 +61,7 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
+    @student.place_name = params[:student][:place_name]
     respond_to do |format|
       if @student.update(student_params)
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
@@ -60,7 +80,7 @@ class StudentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to students_url }
       format.json { head :no_content }
-    end
+    end 
   end
 
   private
@@ -71,6 +91,20 @@ class StudentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :place_id)
+      params.require(:student).permit(
+        :id,
+        :name,
+        :place_name,
+        :place_id,
+        :expertise_area_id,
+        work_places_attributes: [
+          :id,
+          :organisation_id, :organisation_name,
+          :place_id, :place_name,
+          :engagement_type_id,
+          :current,
+          :_destroy
+        ]
+      )
     end
 end

@@ -1,17 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NidAlumni</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <title>NID Alumni</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= stylesheet_link_tag    "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
+  <div class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <%= link_to "NID Alumni", root_path, class: "navbar-brand" %>
+      </div>
+      <div class="collapse navbar-collapse">
+        <% if user_signed_in? %>
+          <ul class="nav navbar-nav">
+            <li <%= 'class = active' if params[:controller] == "students" %>>
+              <%= link_to "Students", students_path %>
+            </li>
 
-<%= yield %>
+            <li <%= 'class=active' if params[:controller] == "expertise_areas" %>>
+              <%= link_to "Areas of expertise", expertise_areas_path %>
+            </li>
 
+            <li <%= 'class=active' if params[:controller] == "places" %>>
+              <%= link_to "Places", places_path %>
+            </li>
+
+            <li <%= 'class=active' if params[:controller] == "organisations" %>>
+              <%= link_to "Organisations", organisations_path %>
+            </li>
+
+            <li <%= 'class=active' if params[:controller] == "engagement_types" %>>
+              <%= link_to "Engagement Types", engagement_types_path %>
+            </li>
+          </ul>
+        <% end %>
+
+        <ul class="nav navbar-nav navbar-right">
+          <% if user_signed_in? %>
+            <li>
+              <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+            </li>
+          <% else %>
+            <li>
+              <%= link_to "Login", new_user_session_path %>
+            </li>
+          <% end %>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+
+
+  <div class="container">
+    <% if alert %>
+      <p class="notice"><%= notice %></p>
+    <% end %>
+
+    <% if notice %>
+      <p class="alert"><%= alert %></p>
+    <% end %>
+
+    <%= yield %>
+  </div>
 </body>
 </html>
