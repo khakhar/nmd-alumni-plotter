@@ -6,65 +6,81 @@
   <%= stylesheet_link_tag    "application", media: "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+
+  <% if params[:controller] == "main" && params[:action] == "index" %>
+    <style>
+      html, body {
+        height: 100%;
+      }
+    </style>
+  <% end %>
+
 </head>
 <body>
 
-  <div class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <%= link_to "NMD Alumni Plotter", root_path, class: "navbar-brand" %>
-      </div>
-      <div class="collapse navbar-collapse">
-        <% if user_signed_in? %>
-          <ul class="nav navbar-nav">
-            <li <%= 'class = active' if params[:controller] == "students" %>>
-              <%= link_to "Students", students_path %>
-            </li>
-
-            <li <%= 'class=active' if params[:controller] == "expertise_areas" %>>
-              <%= link_to "Areas of expertise", expertise_areas_path %>
-            </li>
-
-            <li <%= 'class=active' if params[:controller] == "places" %>>
-              <%= link_to "Places", places_path %>
-            </li>
-
-            <li <%= 'class=active' if params[:controller] == "organisations" %>>
-              <%= link_to "Organisations", organisations_path %>
-            </li>
-
-            <li <%= 'class=active' if params[:controller] == "engagement_types" %>>
-              <%= link_to "Engagement Types", engagement_types_path %>
-            </li>
-          </ul>
-        <% end %>
-
-        <ul class="nav navbar-nav navbar-right">
+  <% unless params[:controller] == "main" && params[:action] == "index" %>
+    <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <%= link_to "NMD Alumni Plotter", root_path, class: "navbar-brand" %>
+        </div>
+        <div class="collapse navbar-collapse">
           <% if user_signed_in? %>
-            <li>
-              <%= link_to "Logout", destroy_user_session_path, method: :delete %>
-            </li>
-          <% else %>
-            <li>
-              <%= link_to "Login", new_user_session_path %>
-            </li>
+            <ul class="nav navbar-nav">
+              <li <%= 'class = active' if params[:controller] == "students" %>>
+                <%= link_to "Students", students_path %>
+              </li>
+
+              <li <%= 'class=active' if params[:controller] == "expertise_areas" %>>
+                <%= link_to "Areas of expertise", expertise_areas_path %>
+              </li>
+
+              <li <%= 'class=active' if params[:controller] == "places" %>>
+                <%= link_to "Places", places_path %>
+              </li>
+
+              <li <%= 'class=active' if params[:controller] == "organisations" %>>
+                <%= link_to "Organisations", organisations_path %>
+              </li>
+
+              <li <%= 'class=active' if params[:controller] == "engagement_types" %>>
+                <%= link_to "Engagement Types", engagement_types_path %>
+              </li>
+            </ul>
           <% end %>
-        </ul>
-      </div><!--/.nav-collapse -->
+
+          <ul class="nav navbar-nav navbar-right">
+            <% if user_signed_in? %>
+              <li>
+                <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+              </li>
+            <% else %>
+              <li>
+                <%= link_to "Login", new_user_session_path %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
+  <% end %>
 
 
-  <div class="container">
-    <% if alert %>
-      <p class="notice"><%= notice %></p>
-    <% end %>
-
-    <% if notice %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
-
+  <% if params[:controller] == "main" && params[:action] == "index" %>
     <%= yield %>
-  </div>
+  <% else %>
+    <div class="container">
+      <% if alert %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
+
+      <% if notice %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  <% end %>
+
 </body>
 </html>

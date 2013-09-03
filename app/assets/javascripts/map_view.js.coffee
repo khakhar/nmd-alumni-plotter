@@ -1,12 +1,25 @@
 class window.MapView
   options:
     worldCenter:    new L.LatLng(37.3002752813443, 5.625)
-    indiaCenter:    new L.LatLng(24.406094315764562, 78.68738756528921)
-    indiaZoomLevel: 4
+    indiaCenter:    new L.LatLng(22.248428704383624, 77.783203125)
+    indiaZoomLevel: 5
     worldZoomLevel: 2
     cloudMade:
       apiKey:  "fe1dbd920bce412faf852270ad2ee911"
       styleId: "22677"
+
+
+  customIcon:
+    L.icon(
+      iconUrl: '/assets/marker-icon.png',
+      # shadowUrl: 'leaf-shadow.png',
+
+      iconSize:     [16, 16], # size of the icon
+      # shadowSize:   [50, 64], # size of the shadow
+      iconAnchor:   [8, 8], # point of the icon which will correspond to marker's location
+      # shadowAnchor: [4, 62],  # the same for the shadow
+      popupAnchor:  [0, 0] # point from which the popup should open relative to the iconAnchor
+    )
 
 
   constructor: (containerId, @students)->
@@ -66,7 +79,7 @@ class window.MapView
 
 
     options = {className: 'marker-popup'}
-    L.marker(latlng).bindPopup(popupMarkup, options)
+    L.marker(latlng, icon: @customIcon).bindPopup(popupMarkup, options)
 
 
   markersByCurrentLocation: ->
@@ -105,19 +118,16 @@ class window.MapView
     @markerLayer.addLayer(marker)
 
 
-  plot: (onlyLocationFilterChange=false)=>
+  plot: (plotBy, options={})=>
     @markerLayer.clearLayers()
-    expertise = $("#expertise").val()
-    plotBy    = $("#plot-by").val()
 
     successCallback = (data)=>
       @students = data
       @["markersBy#{plotBy}Location"]()
 
-    if onlyLocationFilterChange == true
+    if options.useCache == true
       successCallback(@students)
       return
 
-    params = {expertise: $("#expertise").val()}
-    $.get("/students/search.json", params, successCallback)
+    $.get("/students/search.json", successCallback)
 

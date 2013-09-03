@@ -16,11 +16,11 @@ class Student < ActiveRecord::Base
   paginates_per 50
 
   def internship
-    self.work_places.includes(:organisation, :place).where(engagement_type_id: EngagementType.internship).try(:first)
+    self.work_places.where(engagement_type_id: EngagementType.internship).try(:first)
   end
 
   def current_work_place
-    self.work_places.includes(:organisation, :place).where(current: true).try(:first)
+    self.work_places.where(current: true).try(:first)
   end
 
 end

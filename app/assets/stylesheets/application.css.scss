@@ -10,7 +10,7 @@
   margin-top: 0px;
 }
 
-#map { height: 525px; }
+#map { height: 100%; }
 
 .marker-popup {
   .leaflet-popup-content-wrapper {
@@ -37,4 +37,45 @@
       text-transform: none;
     }
   }
+}
+
+.map-options {
+  position: absolute;
+  top: 1em;
+  left: 3.5em;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1em;
+  width: 540px;
+
+  .appname {
+    font-size: 1.5em;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 1em;
+  }
+
+  .option {
+    width: 33.33%;
+    float: left;
+    padding: 0.4em;
+
+    a {
+      width: 33%;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}
+
+
+.nav-list {
+  position: absolute;
+  width: 20em;
+  top: 1em;
+  bottom: 1em;
+  right: 10em;
+  background: rgba(133, 158, 235, 0.7);
+  z-index: 10;
+  border-radius: 3px;
 }

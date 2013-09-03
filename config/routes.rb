@@ -18,11 +18,7 @@ NidAlumni::Application.routes.draw do
     end
   end
 
-  resources :students do
-    collection do
-      get :search
-    end
-  end
+  resources :students
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

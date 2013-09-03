@@ -1,26 +1,7 @@
 class StudentsController < ApplicationController
-  before_action :authenticate_user!, except: :search
+  before_action :authenticate_user!
   before_action :set_student, only: [:show, :edit, :update, :destroy]
 
-  def search
-    expertise_filter = params[:expertise] || "all"
-    if expertise_filter == "all"
-      @students = Student.includes(:expertise_area, :place).load
-    else
-      @students = Student.includes(:expertise_area, :place).where(expertise_area_id: expertise_filter)
-    end
-
-    respond_to do |format|
-      format.json do
-        render text: @students.to_json(include: {
-          expertise_area: {},
-          place: {},
-          internship: {include: [:organisation, :place]},
-          current_work_place: {include: [:organisation, :place]}
-        })
-      end
-    end
-  end
 
   # GET /students
   # GET /students.json

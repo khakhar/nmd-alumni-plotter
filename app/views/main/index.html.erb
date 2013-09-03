@@ -1,30 +1,30 @@
-<script>
-  var students = <%=
-    @students.to_json(include: {
-      expertise_area: {},
-      place: {},
-      internship: {include: [:organisation, :place]},
-      current_work_place: {include: [:organisation, :place]}
-    }).html_safe
-  %>;
-</script>
+<div class="nav-list">
+</div>
 
-<div class="options">
-  <div class="form-group">
-    Show alumni with
-    <select id="expertise">
-      <option value="all">Any area of expertise</option>
-      <%= options_for_select @expertise_areas %>
-    </select>
-
-    and plot locations by
-    <select id="plot-by">
-      <option value="Current">Current workplace location</option>
-      <option value="Internship">Internship location</option>
-      <option value="Native">Native</option>
-    </select>
-
+<div class="map-options">
+  <div class="appname">NMD Alumni Plotter</div>
+  <div class="option">
+    <a href="#">Where do they come from?</a>
+  </div>
+  <div class="option">
+    <a href="#">Whom did they intern with, and where?</a>
+  </div>
+  <div class="option">
+    <a href="#">Where do they work now, and with whom?</a>
   </div>
 </div>
 
 <div id="map"></div>
+
+<script type="text/javascript">
+  var data = <%= render(template: "main/data.json.jbuilder", locals: {
+      organisations: @organisations,
+      students: @students,
+      places: @places
+    }).html_safe %>
+
+  $(document).ready(function(){
+    window.mapView = new MapView('map', data);
+    mapView.plot("Native");
+  });
+</script>
