@@ -1,23 +1,40 @@
 class window.MapView
-  osmUrl:        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  osmAttrib:     'Map data © OpenStreetMap contributors'
-  worldCenter:    new L.LatLng(37.3002752813443, 5.625)
-  indiaCenter:    new L.LatLng(24.406094315764562, 78.68738756528921)
-  indiaZoomLevel: 4
-  worldZoomLevel: 2
+  options:
+    worldCenter:    new L.LatLng(37.3002752813443, 5.625)
+    indiaCenter:    new L.LatLng(24.406094315764562, 78.68738756528921)
+    indiaZoomLevel: 4
+    worldZoomLevel: 2
+    cloudMade:
+      apiKey:  "fe1dbd920bce412faf852270ad2ee911"
+      styleId: "22677"
+
 
   constructor: (containerId, @students)->
     L.Icon.Default.imagePath = "/assets"
     @map = L.map('map')
-    @addOSMLayer()
-    @map.setView(@indiaCenter, @indiaZoomLevel)
+    @addCloudMadeLayer()
+    @map.setView(@options.indiaCenter, @options.indiaZoomLevel)
     @markerLayer = L.layerGroup([])
     @map.addLayer(@markerLayer)
 
 
   addOSMLayer: ->
-    osm = new L.TileLayer(@osmUrl, {minZoom: 2, maxZoom: 15, attribution: @osmAttrib})
+    osm = new L.TileLayer(
+      'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+       minZoom: 2,
+       maxZoom: 15,
+       attribution: 'Map data &copy; OpenStreetMap contributors'
+    )
     @map.addLayer(osm)
+
+
+  addCloudMadeLayer: ->
+    cloudmade = L.tileLayer(
+      'http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
+      attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+      key: @options.cloudMade.apiKey,
+      styleId: @options.cloudMade.styleId
+    ).addTo(@map)
 
 
   createMarker: (student, lat, lng)->
@@ -103,3 +120,4 @@ class window.MapView
 
     params = {expertise: $("#expertise").val()}
     $.get("/students/search.json", params, successCallback)
+
