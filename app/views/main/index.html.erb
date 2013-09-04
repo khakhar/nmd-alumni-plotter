@@ -4,13 +4,13 @@
 <div class="map-options">
   <div class="appname">NMD Alumni Plotter</div>
   <div class="option">
-    <a href="#">Where do they come from?</a>
+    <a class="change-plot" data-plot-type="Native">Where do they come from?</a>
   </div>
   <div class="option">
-    <a href="#">Whom did they intern with, and where?</a>
+    <a class="change-plot" data-plot-type="Internship">Whom did they intern with, and where?</a>
   </div>
   <div class="option">
-    <a href="#">Where do they work now, and with whom?</a>
+    <a class="change-plot" data-plot-type="Current">Where do they work now, and with whom?</a>
   </div>
 </div>
 
@@ -21,10 +21,15 @@
       organisations: @organisations,
       students: @students,
       places: @places
-    }).html_safe %>
+    }).html_safe %>;
 
   $(document).ready(function(){
     window.mapView = new MapView('map', data);
     mapView.plot("Native");
+
+    $(".change-plot").click(function(event){
+      $(".map-options .option").removeClass("selected-plot")
+      $(this).parent().addClass("selected-plot")
+    });
   });
 </script>

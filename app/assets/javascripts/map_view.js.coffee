@@ -8,6 +8,8 @@ class window.MapView
       apiKey:  "fe1dbd920bce412faf852270ad2ee911"
       styleId: "22677"
 
+  $navList: $(".nav-list")
+
 
   customIcon:
     L.icon(
@@ -22,7 +24,7 @@ class window.MapView
     )
 
 
-  constructor: (containerId, @students)->
+  constructor: (containerId, @data)->
     L.Icon.Default.imagePath = "/assets"
     @map = L.map('map')
     @addCloudMadeLayer()
@@ -50,33 +52,44 @@ class window.MapView
     ).addTo(@map)
 
 
-  createMarker: (student, lat, lng)->
-    latlng = new L.LatLng(lat, lng)
+  getStudent: (id)->
+    @data.students[id]
+
+
+  getOrganisation: (id)->
+    @data.organisations[id]
+
+
+  getPlace: (id)->
+    @data.places[id]
+
+
+  createMarker: (studentId, opts={})->
+    latlng = new L.LatLng(opts.lat, opts.lng)
     popupMarkup = """
-      <div class='student_name'>#{student.name}</div>
-      <div class='expertise'>#{student.expertise_area.name}</div>
+      <div class='student_name'>#{@getStudent(studentId).name}</div>
+      <div class='expertise'>#{@getStudent(studentId).expertise_area_name}</div>
     """
 
-    if student.internship
+    if opts.internship? || opts.current_work_place?
+      if opts.internship?
+        engagementLabel  = "Interned at"
+        organisationName = @getOrganisation(@getStudent(studentId).internship_organisation_id)
+        placeName        = @getPlace(@getStudent(studentId).internship_place_id).name
+      else
+        engagementLabel  = "Currently at"
+        organisationName = @getOrganisation(@getStudent(studentId).current_organisation_id)
+        placeName        = @getPlace(@getStudent(studentId).current_place_id).name
+
+
       popupMarkup += """
-        <div class='popup-field'>Interned at:
+        <div class='popup-field'>#{engagementLabel}
           <div class='popup-field-value'>
-            #{student.internship.organisation.name},
-            #{student.internship.place.name}
+            #{organisationName},
+            #{placeName}
           </div>
         </div>
       """
-
-    if student.current_work_place
-      popupMarkup += """
-        <div class='popup-field'>Currently at:
-          <div class='popup-field-value'>
-            #{student.current_work_place.organisation.name},
-            #{student.current_work_place.place.name}
-          </div>
-        </div>
-      """
-
 
     options = {className: 'marker-popup'}
     L.marker(latlng, icon: @customIcon).bindPopup(popupMarkup, options)
@@ -105,11 +118,14 @@ class window.MapView
 
 
   markersByNativeLocation: ->
-    for student in @students
+    $navList.empty()
+
+    for id, student of @data.students
+
       marker = @createMarker(
-        student,
-        student.place.latitude,
-        student.place.longitude
+        id,
+        lat: @getPlace(student.place_id).latitude,
+        lng: @getPlace(student.place_id).longitude
       )
       @addMarker(marker)
 
@@ -118,16 +134,8 @@ class window.MapView
     @markerLayer.addLayer(marker)
 
 
-  plot: (plotBy, options={})=>
+  plot: (plotBy)=>
     @markerLayer.clearLayers()
+    @["markersBy#{plotBy}Location"]()
 
-    successCallback = (data)=>
-      @students = data
-      @["markersBy#{plotBy}Location"]()
-
-    if options.useCache == true
-      successCallback(@students)
-      return
-
-    $.get("/students/search.json", successCallback)
 
