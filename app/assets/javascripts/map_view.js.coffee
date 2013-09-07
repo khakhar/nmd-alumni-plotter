@@ -11,14 +11,16 @@ class window.MapView
   $navList: $(".nav-list")
 
 
-  customIcon:
+  customIcon: (size = 1)->
+    iconSize   = 2 * size
+    anchorSize = iconSize/2
     L.icon(
       iconUrl: '/assets/marker-icon.png',
       # shadowUrl: 'leaf-shadow.png',
 
-      iconSize:     [16, 16], # size of the icon
+      iconSize:     [iconSize, iconSize], # size of the icon
       # shadowSize:   [50, 64], # size of the shadow
-      iconAnchor:   [8, 8], # point of the icon which will correspond to marker's location
+      iconAnchor:   [anchorSize, anchorSize], # point of the icon which will correspond to marker's location
       # shadowAnchor: [4, 62],  # the same for the shadow
       popupAnchor:  [0, 0] # point from which the popup should open relative to the iconAnchor
     )
@@ -64,6 +66,23 @@ class window.MapView
     @data.places[id]
 
 
+  createGroupMarker: (studentIds, opts={className: 'marker-popup'}) ->
+    latlng = new L.LatLng(opts.lat, opts.lng)
+    popupMarkup = ""
+
+    for studentId in studentIds
+      popupMarkup += """
+        <div class="student">
+          <div class='student_name'>#{@getStudent(studentId).name}</div>
+          <div class='expertise'>#{@getStudent(studentId).expertise_area_name}</div>
+        </div>
+      """
+
+    options = {className: opts.className}
+    L.marker(latlng, icon: @customIcon()).bindPopup(popupMarkup, options)
+
+
+
   createMarker: (studentId, opts={})->
     latlng = new L.LatLng(opts.lat, opts.lng)
     popupMarkup = """
@@ -92,27 +111,43 @@ class window.MapView
       """
 
     options = {className: 'marker-popup'}
-    L.marker(latlng, icon: @customIcon).bindPopup(popupMarkup, options)
+    L.marker(latlng, icon: @customIcon()).bindPopup(popupMarkup, options)
 
 
   markersByCurrentLocation: ->
-    for student in @students
-      continue if !student.current_work_place
-      marker = @createMarker(
-        student,
-        student.current_work_place.place.latitude,
-        student.current_work_place.place.longitude
-      )
-      @addMarker(marker)
+    groups = {}
+    for id, student of @data.students
+      continue if !student.current_work_place_id
+
+      if !groups[student.current_organisation_id]
+        groups[student.current_organisation_id] = {}
+
+      if !groups[student.current_organisation_id][student.current_place_id]
+        groups[student.current_organisation_id][student.current_place_id] = []
+
+      groups[student.current_organisation_id][student.current_place_id].push(id)
+
+
+    for organisation_id, group of groups
+      for placeId, studentIds of group
+        marker = @createGroupMarker(
+          studentIds,
+          lat: @getPlace(placeId).latitude,
+          lng: @getPlace(placeId).longitude,
+          className: "#{organisation_id}"
+        )
+        @addMarker(marker)
 
 
   markersByInternshipLocation: ->
+    #TODO group by location
     for student in @students
-      continue if !student.internship
+      continue if !student.internship_id
       marker = @createMarker(
         student,
-        student.internship.place.latitude,
-        student.internship.place.longitude
+        lat: @getPlace(student.internship_place_id).latitude,
+        lng: @getPlace(student.internship_place_id).longitude,
+        className: "organisation-#{id}"
       )
       @addMarker(marker)
 
@@ -125,7 +160,8 @@ class window.MapView
       marker = @createMarker(
         id,
         lat: @getPlace(student.place_id).latitude,
-        lng: @getPlace(student.place_id).longitude
+        lng: @getPlace(student.place_id).longitude,
+        className: "student-#{id}"
       )
       @addMarker(marker)
 
