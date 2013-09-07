@@ -7,7 +7,6 @@ class Student < ActiveRecord::Base
 
   validates_presence_of :name
   validates_presence_of :expertise_area_id
-  validates_presence_of :place_id
 
   accepts_nested_attributes_for :work_places,
     reject_if: proc { |attributes| attributes['organisation_name'].blank? },
