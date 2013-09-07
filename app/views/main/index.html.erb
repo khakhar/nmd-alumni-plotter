@@ -1,4 +1,5 @@
 <div class="nav-list">
+  <div class="items"></div>
 </div>
 
 <div class="map-options">
@@ -9,7 +10,7 @@
   <div class="option">
     <a class="change-plot" data-plot-type="Internship">Whom did they intern with, and where?</a>
   </div>
-  <div class="option">
+  <div class="option selected-plot">
     <a class="change-plot" data-plot-type="Current">Where do they work now, and with whom?</a>
   </div>
 </div>
@@ -25,7 +26,7 @@
 
   $(document).ready(function(){
     window.mapView = new MapView('map', data);
-    mapView.plot("Native");
+    mapView.plot("Current");
 
     $(".change-plot").click(function(event){
       $(".map-options .option").removeClass("selected-plot")

@@ -7,12 +7,18 @@ class window.MapView
     cloudMade:
       apiKey:  "fe1dbd920bce412faf852270ad2ee911"
       styleId: "22677"
+  currentGroup: {}
 
-  $navList: $(".nav-list")
+
+  addItemToList: (name, markerId)->
+    $item = $("<div>").addClass("item").html(name)
+    $item.click =>
+      @lmap._layers["#{markerId}"].fire("click")
+    $(".nav-list .items").append($item)
 
 
   customIcon: (size = 1)->
-    iconSize   = 2 * size
+    iconSize   = 8 * size
     anchorSize = iconSize/2
     L.icon(
       iconUrl: '/assets/marker-icon.png',
@@ -28,11 +34,11 @@ class window.MapView
 
   constructor: (containerId, @data)->
     L.Icon.Default.imagePath = "/assets"
-    @map = L.map('map')
+    @lmap = L.map('map')
     @addCloudMadeLayer()
-    @map.setView(@options.indiaCenter, @options.indiaZoomLevel)
+    @lmap.setView(@options.indiaCenter, @options.indiaZoomLevel)
     @markerLayer = L.layerGroup([])
-    @map.addLayer(@markerLayer)
+    @lmap.addLayer(@markerLayer)
 
 
   addOSMLayer: ->
@@ -42,7 +48,7 @@ class window.MapView
        maxZoom: 15,
        attribution: 'Map data &copy; OpenStreetMap contributors'
     )
-    @map.addLayer(osm)
+    @lmap.addLayer(osm)
 
 
   addCloudMadeLayer: ->
@@ -51,7 +57,7 @@ class window.MapView
       attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
       key: @options.cloudMade.apiKey,
       styleId: @options.cloudMade.styleId
-    ).addTo(@map)
+    ).addTo(@lmap)
 
 
   getStudent: (id)->
@@ -114,29 +120,38 @@ class window.MapView
     L.marker(latlng, icon: @customIcon()).bindPopup(popupMarkup, options)
 
 
-  markersByCurrentLocation: ->
-    groups = {}
-    for id, student of @data.students
-      continue if !student.current_work_place_id
-
-      if !groups[student.current_organisation_id]
-        groups[student.current_organisation_id] = {}
-
-      if !groups[student.current_organisation_id][student.current_place_id]
-        groups[student.current_organisation_id][student.current_place_id] = []
-
-      groups[student.current_organisation_id][student.current_place_id].push(id)
+  markersByCurrentLocation: (opts)->
+    @tmpGroups = {}
+    @currentGroups = {} if !opts.filterPlot
 
 
-    for organisation_id, group of groups
+    if !opts.filterPlot
+      for id, student of @data.students
+        continue if !student.current_work_place_id
+        if !@currentGroups[student.current_organisation_id]
+          @currentGroups[student.current_organisation_id] = {}
+        if !@currentGroups[student.current_organisation_id][student.current_place_id]
+          @currentGroups[student.current_organisation_id][student.current_place_id] = []
+        @currentGroups[student.current_organisation_id][student.current_place_id].push(id)
+      @tmpGroups = @currentGroups
+    else
+      for id, group of @currentGroups
+        if @getOrganisation(id).match(new RegExp(opts.filterString, "gi"))
+          @tmpGroups[id] = group
+
+    for id, group of @tmpGroups
+      @addItemToList(@getOrganisation(id), "group-#{id}")
       for placeId, studentIds of group
+        @getPlace(placeId).name
         marker = @createGroupMarker(
           studentIds,
           lat: @getPlace(placeId).latitude,
           lng: @getPlace(placeId).longitude,
-          className: "#{organisation_id}"
+          className: "group-#{id}"
         )
+        marker._leaflet_id = "group-#{id}"
         @addMarker(marker)
+
 
 
   markersByInternshipLocation: ->
@@ -147,21 +162,18 @@ class window.MapView
         student,
         lat: @getPlace(student.internship_place_id).latitude,
         lng: @getPlace(student.internship_place_id).longitude,
-        className: "organisation-#{id}"
+        className: "group-#{id}"
       )
       @addMarker(marker)
 
 
   markersByNativeLocation: ->
-    $navList.empty()
-
     for id, student of @data.students
-
       marker = @createMarker(
         id,
         lat: @getPlace(student.place_id).latitude,
         lng: @getPlace(student.place_id).longitude,
-        className: "student-#{id}"
+        className: "group-#{id}"
       )
       @addMarker(marker)
 
@@ -170,8 +182,9 @@ class window.MapView
     @markerLayer.addLayer(marker)
 
 
-  plot: (plotBy)=>
+  plot: (plotBy, filterPlot=false, filterString="")=>
+    $(".nav-list .items").empty()
+    @currentPlotType = plotBy
     @markerLayer.clearLayers()
-    @["markersBy#{plotBy}Location"]()
-
+    @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
 
