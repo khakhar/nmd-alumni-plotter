@@ -1,18 +1,32 @@
-# NID Alumni
+# NMD Alumni Plotter
 
-Where are they from?
+## Install
 
-Where did they intern?
+* Install dependencies using `bundler`.
 
-Where do they work?
+      bundle install
 
-What is their expertise?
+* Set db credentials. Use `config/database.yml.sample` as a template to create `config/database.yml`.
+
+* Migrate the database and seed it with data.
+
+      rake db:migrate db:seed
+
+* Start the server
+
+      bundle exec rails s
+
+## Utils
+
+* Rake task to populate database with samples
+
+      bundle exec rake populate_samples
+
+* Rake task to clear user entered data from the database
+
+      bundle exec rake clear_data
 
 
-Show location by:
-  * <Native>
-  * <Internship location>
-  * <Current work location>
+#### Generate placeholders from command line
 
-Limit by expertise:
-  * Will show users only for the selected expertise
+convert -size 50x50 xc:skyblue -fill skyblue -stroke skyblue -draw "rectangle 0,0 50,50" draw_rect.gif

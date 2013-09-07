@@ -9,6 +9,7 @@ gem 'devise'
 gem 'kaminari'
 gem 'cocoon'
 gem 'geocoder'
+gem 'faker'
 gem 'carmen-rails', '~> 1.0.0', github: 'jim/carmen-rails'
 
 # Use sqlite3 as the database for Active Record

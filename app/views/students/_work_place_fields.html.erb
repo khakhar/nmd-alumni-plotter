@@ -4,9 +4,11 @@
     <h3 class="panel-title">
       <%= f.select(
           :engagement_type_id,
-          options_from_collection_for_select(EngagementType.all, :id, :name)
+          EngagementType.all.collect {|i| [i.name, i.id]},
+          selected: f.object.engagement_type_id
         ) %>
     </h3>
+    <%= f.object.engagement_type_id %>
   </div>
 
   <div class="panel-body">

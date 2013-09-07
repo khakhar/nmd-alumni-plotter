@@ -3,7 +3,7 @@ module FlexiblePlace
 
   included do
     attr_accessor :place_name
-    before_save   :ensure_place_id
+    before_validation   :ensure_place_id
 
 
     def place_name
@@ -12,9 +12,6 @@ module FlexiblePlace
 
 
     def ensure_place_id
-      puts "*"*10
-      puts "PLACE_NAME: #{@place_name}"
-      puts "*"*10
       return if self.place && self.place.name == @place_name
       return if @place_name.blank?
       search = Place.find_like(@place_name, wildcard: false)

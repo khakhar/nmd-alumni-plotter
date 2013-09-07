@@ -16,14 +16,19 @@
   .leaflet-popup-content-wrapper {
     border-radius: 3px !important;
     -moz-border-radius: 3px !important;
+     padding-top: 1em;
 
-    .student_name {
-      font-size: 1.2em;
-      font-weight: bold;
-    }
+    .student {
+      padding-bottom: 1em;
 
-    .expertise_area {
-      color: #CCC;
+      .student_name {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+      .expertise_area {
+        color: #CCC;
+      }
     }
 
     .popup-field {
@@ -72,6 +77,13 @@
   }
 }
 
+#search {
+  width: 100%;
+  border-radius: 3px;
+  border: 1px solid #999;
+  padding: 0.25em;
+  margin-bottom: 1em;
+}
 
 .nav-list {
   position: absolute;
@@ -82,4 +94,16 @@
   background: rgba(133, 158, 235, 0.7);
   z-index: 10;
   border-radius: 3px;
+  padding: 1em;
+
+  .item {
+    color: #FFF;
+    font-family: "PT Sans", Helvetica, Verdana, Arial, sans-serif;
+    padding: 0.25em;
+
+    span {
+     cursor: pointer;
+    }
+  }
+
 }

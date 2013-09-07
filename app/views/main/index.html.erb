@@ -1,4 +1,7 @@
 <div class="nav-list">
+  <div class="search-wrapper">
+    <input type="text" id="search" autocomplete="off"/>
+  </div>
   <div class="items"></div>
 </div>
 
@@ -28,9 +31,14 @@
     window.mapView = new MapView('map', data);
     mapView.plot("Current");
 
+    $("#search").keyup(function(event){
+      mapView.plot(mapView.currentPlotType, true, $("#search").val());
+    });
+
     $(".change-plot").click(function(event){
-      $(".map-options .option").removeClass("selected-plot")
-      $(this).parent().addClass("selected-plot")
+      $(".map-options .option").removeClass("selected-plot");
+      $(this).parent().addClass("selected-plot");
+      mapView.plot($(this).data("plot-type"));
     });
   });
 </script>
