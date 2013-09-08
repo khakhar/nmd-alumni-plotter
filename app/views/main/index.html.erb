@@ -7,13 +7,13 @@
 
 <div class="map-options">
   <div class="appname">NMD Alumni Plotter</div>
-  <div class="option">
+  <div class="option selected-plot">
     <a class="change-plot" data-plot-type="Native">Where do they come from?</a>
   </div>
   <div class="option">
     <a class="change-plot" data-plot-type="Internship">Whom did they intern with, and where?</a>
   </div>
-  <div class="option selected-plot">
+  <div class="option">
     <a class="change-plot" data-plot-type="Current">Where do they work now, and with whom?</a>
   </div>
 </div>
@@ -29,7 +29,7 @@
 
   $(document).ready(function(){
     window.mapView = new MapView('map', data);
-    mapView.plot("Current");
+    mapView.plot("Native");
 
     $("#search").keyup(function(event){
       mapView.plot(mapView.currentPlotType, true, $("#search").val());
