@@ -84,7 +84,7 @@
   clear: both;
 
   #search {
-    width: 95%;
+    width: 100%;
     border-radius: 3px;
     border: 1px solid #999;
     padding: 0.25em 1.75em 0.25em 0.25em;
@@ -93,7 +93,9 @@
 
   .clear-search {
     cursor: pointer;
-    margin-left: -1.5em;
+    position: absolute;
+    top: 1.25em;
+    right: 1.75em;
   }
 }
 
@@ -108,6 +110,11 @@
   z-index: 10;
   border-radius: 3px;
   padding: 1em;
+
+  .items {
+    float: left;
+    width: 100%;
+  }
 
   .item {
     color: #FFF;

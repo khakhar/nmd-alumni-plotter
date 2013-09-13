@@ -96,10 +96,6 @@ class window.MapView
           @currentGroups[student.current_organisation_id][student.current_place_id] = []
         @currentGroups[student.current_organisation_id][student.current_place_id].push(id)
 
-        if @placesWithMarkers.indexOf(student.current_place_id) == -1
-          @placesWithMarkers.push(student.current_place_id)
-
-      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -119,6 +115,8 @@ class window.MapView
           leafletId: "group-#{id}-#{placeId}"
           labelId:   "group-label-#{id}"
         )
+        if @placesWithMarkers.indexOf(placeId) == -1
+          @placesWithMarkers.push(placeId)
 
 
   markersByInternshipLocation: (opts)->
@@ -131,10 +129,6 @@ class window.MapView
           @currentGroups[student.internship_organisation_id][student.internship_place_id] = []
         @currentGroups[student.internship_organisation_id][student.internship_place_id].push(id)
 
-        if @placesWithMarkers.indexOf(student.internship_place_id) == -1
-          @placesWithMarkers.push(student.internship_place_id)
-
-      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -154,6 +148,8 @@ class window.MapView
           leafletId: "group-#{id}-#{placeId}"
           labelId:   "group-label-#{id}"
         )
+        if @placesWithMarkers.indexOf(placeId) == -1
+          @placesWithMarkers.push(placeId)
 
 
   markersByNativeLocation: (opts)->
@@ -162,10 +158,6 @@ class window.MapView
         @currentGroups[id] = {}
         @currentGroups[id][student.place_id] = [id]
 
-        if @placesWithMarkers.indexOf(student.place_id) == -1
-            @placesWithMarkers.push(student.place_id)
-
-      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -183,6 +175,9 @@ class window.MapView
           leafletId: "group-#{id}-#{placeId}"
         )
 
+      if @placesWithMarkers.indexOf(placeId) == -1
+        @placesWithMarkers.push(placeId)
+
 
   plot: (plotBy, filterPlot=false, filterString="")=>
     $(".nav-list .items").empty()
@@ -190,14 +185,15 @@ class window.MapView
     @currentPlotType   = plotBy
     @navListItems      = []
     @previousMarkerIds = []
+    @placesWithMarkers = []
     @tmpGroups = {}
 
     if !filterPlot
       @currentGroups     = {}
-      @placesWithMarkers = []
       $("#search").val("")
 
     @map.clear()
     @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
     @populateNavList()
+    @addPlaceMarkers()
 
