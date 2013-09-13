@@ -4,6 +4,7 @@ json.students do |json|
       json.set! :name,                student.name
       json.set! :place_id,            student.place_id
       json.set! :expertise_area_name, student.expertise_area.name
+      json.set! :website,             student.full_url
 
       json.set! :current_work_place_id,   student.current_work_place.try(:id)
       json.set! :current_organisation_id, student.current_work_place.try(:organisation_id)
@@ -30,6 +31,9 @@ end
 
 json.organisations do |json|
   organisations.each do |organisation|
-    json.set! organisation.id, organisation.name
+    json.set! organisation.id do |json|
+      json.name     organisation.name
+      json.website  organisation.full_url
+    end
   end
 end

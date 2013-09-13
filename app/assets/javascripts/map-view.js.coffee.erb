@@ -1,7 +1,7 @@
 class window.MapView
   currentGroups: {}
   previousMarkerIds: []
-  navListItemNames: {}
+  navListItems: {}
   placesWithMarkers: []
 
   constructor: (containerId, @data)->
@@ -25,15 +25,28 @@ class window.MapView
 
 
   populateNavList: ->
-    names = (name for name, groupId of @navListItemNames)
+    ids = (groupId for groupId, attrs of @navListItems)
 
-    for name in names.sort()
-      groupId   = @navListItemNames[name]
-      $itemSpan = $("<span>").html(name)
-      $item     = $("<div>").addClass("item").append($itemSpan)
-      $itemSpan.data("group-id", groupId)
+    sortedIds = ids.sort (a, b)=>
+      if [@navListItems[a].name, @navListItems[b].name].sort().indexOf(@navListItems[a].name) == 0
+        return -1
+      else
+        return 1
 
-      $itemSpan.click (event)=>
+    for id in ids
+      groupId    = id
+      $itemLabel = $("<span>").html(@navListItems[id].name)
+      $item      = $("<div>").addClass("item").append($itemLabel)
+
+      if @navListItems[id].website?
+        $itemLink  = $("<a>")
+          .attr(href: @navListItems[id].website, target: "_blank")
+          .html("<img src='<%= asset_path('arrow.png') %>'/>")
+        $item.append($itemLink)
+
+      $itemLabel.data("group-id", groupId)
+
+      $itemLabel.click (event)=>
         groupId   = $(event.target).data("group-id")
         @map.setDefaultIconOnMarkers(@previousMarkerIds)
         for placeId, studentIds of @currentGroups[groupId]
@@ -43,18 +56,20 @@ class window.MapView
       $(".nav-list .items").append($item)
 
 
-  addItemToList: (name, groupId)->
-    @navListItemNames[name] = groupId
+  addItemToList: (name, groupId, website)->
+    @navListItems[groupId] = {name: name, website: website}
 
 
   createMarker: (studentIds, opts) ->
     markup = ""
 
     for studentId in studentIds
+      student = @getStudent(studentId)
       markup += """
         <div class="student">
-          <div class='student_name'>#{@getStudent(studentId).name}</div>
-          <div class='expertise'>#{@getStudent(studentId).expertise_area_name}</div>
+          <div class='student_name'>#{student.name}</div>
+          <div class='expertise'>#{student.expertise_area_name}</div>
+          #{if student.website? then "<div class='website'><a href='#{student.website}'>#{student.website}</a></div>" else ""}
         </div>
       """
     opts['weight'] = studentIds.length
@@ -79,12 +94,13 @@ class window.MapView
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
-        if @getOrganisation(id).match(new RegExp(opts.filterString, "gi"))
+        if @getOrganisation(id).name.match(new RegExp(opts.filterString, "gi"))
           @tmpGroups[id] = group
 
 
     for id, group of @tmpGroups
-      @addItemToList(@getOrganisation(id), id)
+      organisation = @getOrganisation(id)
+      @addItemToList(organisation.name, id, organisation.website)
       for placeId, studentIds of group
         @getPlace(placeId).name
         marker = @createMarker(
@@ -112,12 +128,13 @@ class window.MapView
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
-        if @getOrganisation(id).match(new RegExp(opts.filterString, "gi"))
+        if @getOrganisation(id).name.match(new RegExp(opts.filterString, "gi"))
           @tmpGroups[id] = group
 
 
     for id, group of @tmpGroups
-      @addItemToList(@getOrganisation(id), id)
+      organisation = @getOrganisation(id)
+      @addItemToList(organisation.name, id, organisation.website)
       for placeId, studentIds of group
         @getPlace(placeId).name
         marker = @createMarker(
@@ -145,7 +162,7 @@ class window.MapView
           @tmpGroups[id] = group
 
     for id, group of @tmpGroups
-      @addItemToList(@getStudent(id).name, id)
+      @addItemToList(@getStudent(id).name, id, @getStudent(id).website)
       for placeId, studentIds of group
         @getPlace(placeId).name
         marker = @createMarker(
@@ -159,12 +176,12 @@ class window.MapView
   plot: (plotBy, filterPlot=false, filterString="")=>
     $(".nav-list .items").empty()
     @currentPlotType   = plotBy
-    @navListItemNames  = []
+    @navListItems      = []
     @previousMarkerIds = []
     @tmpGroups = {}
 
     if !filterPlot
-      @currentGroups = {}
+      @currentGroups     = {}
       @placesWithMarkers = []
 
     @map.clear()

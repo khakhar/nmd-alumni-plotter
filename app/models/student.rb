@@ -4,6 +4,7 @@ class Student < ActiveRecord::Base
   belongs_to :expertise_area
 
   include FlexiblePlace
+  include Linkable
 
   validates_presence_of :name
   validates_presence_of :expertise_area_id

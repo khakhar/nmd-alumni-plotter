@@ -76,6 +76,7 @@ class StudentsController < ApplicationController
         :id,
         :name,
         :place_name,
+        :website,
         :place_id,
         :expertise_area_id,
         work_places_attributes: [
