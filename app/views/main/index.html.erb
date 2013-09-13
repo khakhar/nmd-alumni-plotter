@@ -1,6 +1,7 @@
 <div class="nav-list">
   <div class="search-wrapper">
     <input type="text" id="search" autocomplete="off" placeholder="search"/>
+    <span class="clear-search">x</span>
   </div>
   <div class="items"></div>
 </div>
@@ -33,6 +34,11 @@
 
     $("#search").keyup(function(event){
       mapView.plot(mapView.currentPlotType, true, $("#search").val());
+    });
+
+    $(".clear-search").click(function(){
+      $("#search").val("");
+      $("#search").keyup();
     });
 
     $(".change-plot").click(function(event){
