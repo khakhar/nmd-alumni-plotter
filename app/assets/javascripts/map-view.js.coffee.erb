@@ -175,6 +175,7 @@ class window.MapView
 
   plot: (plotBy, filterPlot=false, filterString="")=>
     $(".nav-list .items").empty()
+
     @currentPlotType   = plotBy
     @navListItems      = []
     @previousMarkerIds = []
@@ -183,6 +184,7 @@ class window.MapView
     if !filterPlot
       @currentGroups     = {}
       @placesWithMarkers = []
+      $("#search").val("")
 
     @map.clear()
     @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
