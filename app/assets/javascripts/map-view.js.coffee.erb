@@ -53,6 +53,10 @@ class window.MapView
 
       $itemLabel.click (event)=>
         groupId   = $(event.target).data("group-id")
+
+        $(".item").removeClass("selected-item")
+        $(event.target).parent().addClass("selected-item")
+
         @map.setDefaultIconOnMarkers(@previousMarkerIds)
         for placeId, studentIds of @currentGroups[groupId]
           @map.highlightMarker("group-#{groupId}-#{placeId}")
