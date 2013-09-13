@@ -2,6 +2,7 @@ class window.MapView
   currentGroups: {}
   previousMarkerIds: []
   navListItemNames: {}
+  placesWithMarkers: []
 
   constructor: (containerId, @data)->
     @map = new LeafletMap(containerId)
@@ -10,6 +11,17 @@ class window.MapView
   getStudent:      (id)-> @data.students[id]
   getOrganisation: (id)-> @data.organisations[id]
   getPlace:        (id)-> @data.places[id]
+
+
+
+  addPlaceMarkers: ()->
+    for placeId in @placesWithMarkers
+      place = @getPlace(placeId)
+      marker = @map.createPlaceLabel(
+        place.name,
+        lat: place.latitude,
+        lng: place.longitude
+      )
 
 
   populateNavList: ->
@@ -50,17 +62,20 @@ class window.MapView
 
 
   markersByCurrentLocation: (opts)->
-    @tmpGroups = {}
-    @currentGroups = {} if !opts.filterPlot
-
     if !opts.filterPlot
       for id, student of @data.students
         continue if !student.current_work_place_id
         if !@currentGroups[student.current_organisation_id]
           @currentGroups[student.current_organisation_id] = {}
+
         if !@currentGroups[student.current_organisation_id][student.current_place_id]
           @currentGroups[student.current_organisation_id][student.current_place_id] = []
         @currentGroups[student.current_organisation_id][student.current_place_id].push(id)
+
+        if @placesWithMarkers.indexOf(student.current_place_id) == -1
+          @placesWithMarkers.push(student.current_place_id)
+
+      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -81,9 +96,6 @@ class window.MapView
 
 
   markersByInternshipLocation: (opts)->
-    @tmpGroups = {}
-    @currentGroups = {} if !opts.filterPlot
-
     if !opts.filterPlot
       for id, student of @data.students
         continue if !student.internship_place_id
@@ -92,6 +104,11 @@ class window.MapView
         if !@currentGroups[student.internship_organisation_id][student.internship_place_id]
           @currentGroups[student.internship_organisation_id][student.internship_place_id] = []
         @currentGroups[student.internship_organisation_id][student.internship_place_id].push(id)
+
+        if @placesWithMarkers.indexOf(student.internship_place_id) == -1
+          @placesWithMarkers.push(student.internship_place_id)
+
+      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -112,13 +129,15 @@ class window.MapView
 
 
   markersByNativeLocation: (opts)->
-    @tmpGroups = {}
-    @currentGroups = {} if !opts.filterPlot
-
     if !opts.filterPlot
       for id, student of @data.students
         @currentGroups[id] = {}
         @currentGroups[id][student.place_id] = [id]
+
+        if @placesWithMarkers.indexOf(student.place_id) == -1
+            @placesWithMarkers.push(student.place_id)
+
+      @addPlaceMarkers()
       @tmpGroups = @currentGroups
     else
       for id, group of @currentGroups
@@ -142,6 +161,12 @@ class window.MapView
     @currentPlotType   = plotBy
     @navListItemNames  = []
     @previousMarkerIds = []
+    @tmpGroups = {}
+
+    if !filterPlot
+      @currentGroups = {}
+      @placesWithMarkers = []
+
     @map.clear()
     @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
     @populateNavList()

@@ -52,6 +52,15 @@ class window.LeafletMap
     ).addTo(@lmap)
 
 
+  createPlaceLabel: (label, opts)->
+    latlng = new L.LatLng(opts.lat, opts.lng)
+    marker = L.marker(latlng, icon: @invisibleIcon())
+
+    marker.bindLabel(label, noHide: true)
+      .addTo(@markerLayer)
+      .showLabel()
+
+
   createMarker: (markup, opts) ->
     latlng = new L.LatLng(opts.lat, opts.lng)
     marker = L.marker(latlng, icon: @defaultIcon(opts.weight))
@@ -64,9 +73,6 @@ class window.LeafletMap
     marker.on "popupclose", =>
       marker.setIcon(@defaultIcon(marker.weight))
       marker.setZIndexOffset(-50)
-
-    marker.bindLabel('A sweet static label!', { noHide: true })
-      .addTo(@lmap).showLabel()
 
     @markerLayer.addLayer(marker)
 
@@ -84,6 +90,15 @@ class window.LeafletMap
       iconSize:     [iconSize, iconSize], # size of the icon
       iconAnchor:   [anchorSize, anchorSize], # point of the icon which will correspond to marker's location
       popupAnchor:  [0, 0] # point from which the popup should open relative to the iconAnchor
+    )
+
+
+  invisibleIcon: ()->
+    L.icon(
+      iconUrl: "<%= asset_path('transparent-marker-icon.png') %>",
+      iconSize:     [8, 8], # size of the icon
+      iconAnchor:   [2, 2], # point of the icon which will correspond to marker's location
+      popupAnchor:  [0, 0]  # point from which the popup should open relative to the iconAnchor
     )
 
 
