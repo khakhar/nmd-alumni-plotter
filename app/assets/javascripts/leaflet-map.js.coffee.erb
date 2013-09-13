@@ -67,13 +67,17 @@ class window.LeafletMap
       .bindPopup(markup, {className: 'marker-popup'})
 
     marker.weight = opts.weight
-    marker.groupLabelId = opts.labelId
+
+    if opts.labelId?
+      marker.groupLabelId = opts.labelId
 
     marker._leaflet_id = opts.leafletId if opts.leafletId
     marker.on "popupopen", =>
       marker.setZIndexOffset(50)
 
-    marker.on "click", -> $("##{marker.groupLabelId}").click()
+    marker.on "click", ->
+      if marker.groupLabelId?
+        $("##{marker.groupLabelId}").click()
 
     marker.on "popupclose", =>
       # marker.setIcon(@defaultIcon(marker.weight))
