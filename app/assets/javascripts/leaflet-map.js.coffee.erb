@@ -55,7 +55,7 @@ class window.LeafletMap
   createPlaceLabel: (label, opts)->
     latlng = new L.LatLng(opts.lat, opts.lng)
     marker = L.marker(latlng, icon: @invisibleIcon())
-
+    marker.setZIndexOffset(-100)
     marker.bindLabel(label, noHide: true)
       .addTo(@markerLayer)
       .showLabel()
