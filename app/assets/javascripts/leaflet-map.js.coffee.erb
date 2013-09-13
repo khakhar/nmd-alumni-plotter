@@ -6,7 +6,7 @@ class window.LeafletMap
     worldZoomLevel: 2
     cloudMade:
       apiKey:  "fe1dbd920bce412faf852270ad2ee911"
-      styleId: "22677"
+      styleId: "107987"
 
 
   constructor: (containerId)->
@@ -64,6 +64,9 @@ class window.LeafletMap
     marker.on "popupclose", =>
       marker.setIcon(@defaultIcon(marker.weight))
       marker.setZIndexOffset(-50)
+
+    marker.bindLabel('A sweet static label!', { noHide: true })
+      .addTo(@lmap).showLabel()
 
     @markerLayer.addLayer(marker)
 

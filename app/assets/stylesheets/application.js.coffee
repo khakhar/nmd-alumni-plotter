@@ -2,6 +2,7 @@
 #= require jquery_ujs
 #= require typeahead
 #= require leaflet
+#= require leaflet.label
 #= require cocoon
 #= require bootstrap
 #= require leaflet-map
