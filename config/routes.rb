@@ -4,6 +4,8 @@ NidAlumni::Application.routes.draw do
   root to:  "main#index"
 
   get "admin" => "admin#index", as: :admin
+  get "admin/tasks" => "admin#tasks", as: :admin_tasks
+  post "admin/perform_task" => "admin#perform_task"
 
   resources :expertise_areas
   resources :engagement_types

@@ -8,4 +8,19 @@ class AdminController < ApplicationController
     @engagement_types_count   = EngagementType.count
     @areas_of_expertise_count = ExpertiseArea.count
   end
+
+
+  def tasks
+  end
+
+
+  def perform_task
+    if params[:perform] == "clear_data"
+      Maintenance.clear_data!
+      redirect_to admin_path, notice: "Cleared all necessary data start over!"
+    else
+      render text: "what?"
+    end
+  end
+
 end

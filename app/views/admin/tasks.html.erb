@@ -1,0 +1,14 @@
+<h1>
+  Tasks
+</h1>
+<hr/>
+
+<h3>Mostly dangerous try not to use these</h3>
+
+<br/>
+<br/>
+
+<%= form_tag "/admin/perform_task", method: "POST" do %>
+  <input type="hidden" name="perform" value="clear_data"/>
+  <input type="submit" value="Clear students, organisations and places" class="btn btn-danger btn-lg"/>
+<% end %>

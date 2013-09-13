@@ -74,11 +74,11 @@
     <%= yield %>
   <% else %>
     <div class="container">
-      <% if alert %>
+      <% if notice %>
         <p class="notice"><%= notice %></p>
       <% end %>
 
-      <% if notice %>
+      <% if alert %>
         <p class="alert"><%= alert %></p>
       <% end %>
 

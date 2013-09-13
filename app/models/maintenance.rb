@@ -1,5 +1,5 @@
 class Maintenance
-  def clear_data!
+  def self.clear_data!
     Student.delete_all
     WorkPlace.delete_all
     Organisation.delete_all
@@ -7,7 +7,7 @@ class Maintenance
   end
 
 
-  def populate_with_samples!
+  def self.populate_with_samples!
     names = 10.times.collect { Faker::Name.name }
 
     cities = [
