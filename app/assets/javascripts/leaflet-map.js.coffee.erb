@@ -65,13 +65,18 @@ class window.LeafletMap
     latlng = new L.LatLng(opts.lat, opts.lng)
     marker = L.marker(latlng, icon: @defaultIcon(opts.weight))
       .bindPopup(markup, {className: 'marker-popup'})
+
     marker.weight = opts.weight
+    marker.groupLabelId = opts.labelId
+
     marker._leaflet_id = opts.leafletId if opts.leafletId
     marker.on "popupopen", =>
       marker.setZIndexOffset(50)
 
+    marker.on "click", -> $("##{marker.groupLabelId}").click()
+
     marker.on "popupclose", =>
-      marker.setIcon(@defaultIcon(marker.weight))
+      # marker.setIcon(@defaultIcon(marker.weight))
       marker.setZIndexOffset(-50)
 
     @markerLayer.addLayer(marker)

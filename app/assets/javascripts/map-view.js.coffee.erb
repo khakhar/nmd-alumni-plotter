@@ -35,16 +35,21 @@ class window.MapView
 
     for id in ids
       groupId    = id
-      $itemLabel = $("<span>").html(@navListItems[id].name)
-      $item      = $("<div>").addClass("item").append($itemLabel)
+      $itemLabel = $("<span>")
+        .attr(id: "group-label-#{id}")
+        .html(@navListItems[id].name)
+        .data("group-id", groupId)
+
+      $item = $("<div>").addClass("item").append($itemLabel)
 
       if @navListItems[id].website?
         $itemLink  = $("<a>")
-          .attr(href: @navListItems[id].website, target: "_blank")
-          .html("<img src='<%= asset_path('arrow.png') %>'/>")
+          .attr(
+            href: @navListItems[id].website
+            target: "_blank"
+          ).html("<img src='<%= asset_path('arrow.png') %>'/>")
         $item.append($itemLink)
 
-      $itemLabel.data("group-id", groupId)
 
       $itemLabel.click (event)=>
         groupId   = $(event.target).data("group-id")
@@ -105,9 +110,10 @@ class window.MapView
         @getPlace(placeId).name
         marker = @createMarker(
           studentIds,
-          lat: @getPlace(placeId).latitude,
+          lat: @getPlace(placeId).latitude
           lng: @getPlace(placeId).longitude
           leafletId: "group-#{id}-#{placeId}"
+          labelId:   "group-label-#{id}"
         )
 
 
@@ -142,6 +148,7 @@ class window.MapView
           lat: @getPlace(placeId).latitude,
           lng: @getPlace(placeId).longitude
           leafletId: "group-#{id}-#{placeId}"
+          labelId:   "group-label-#{id}"
         )
 
 
