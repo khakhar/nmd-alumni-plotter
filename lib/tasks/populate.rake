@@ -76,7 +76,9 @@ task populate_samples: :environment do
 
 
   organisations.each do |organisation|
-    Organisation.find_or_create_by name: organisation
+    organisation = Organisation.find_or_initialize_by name: organisation
+    organisation.website = Faker::Internet.url
+    organisation.save
   end
 
   cities.each { |city| Place.find_or_create_by(name: city) }
@@ -89,6 +91,7 @@ task populate_samples: :environment do
     student = Student.find_or_initialize_by name: name
     student.place_id = all_places.sample.id
     student.expertise_area_id = areas_of_expertise.sample.id
+    student.website = Faker::Internet.url
     student.save
 
     student.work_places.create(
@@ -119,6 +122,7 @@ task populate_samples: :environment do
     student = Student.new name: name
     student.place_id = first_sample.place_id
     student.expertise_area_id = areas_of_expertise.sample.id
+    student.website = Faker::Internet.url
     student.save
 
     student.work_places.create(
