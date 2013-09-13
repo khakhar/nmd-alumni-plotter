@@ -1,0 +1,73 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    if($(".change_password").length > 0)
+      $(".password_fields").hide();
+
+    $(".change_password").click(function(){
+      $(".password_fields").toggle();      
+    });
+  })
+
+</script>
+
+
+<% if user.persisted? %>
+  <% form_url = member_path(user) %>
+<% else %>
+  <% form_url = members_path %>
+<% end %>
+
+<%= form_for(user, url: form_url) do |f| %>
+
+  <% if user.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(user.errors.count, "error") %> prohibited this student from being saved:
+      </h2>
+
+      <ul>
+      <% user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+
+  <% if user.persisted? %>
+    <p class="offset2">
+      <%= link_to "change password", "#", class: "change_password" %>
+      <br/>
+    </p>
+  <% end %>
+
+  <div class="password_fields">
+    <div class="form-group">
+      <%= f.label :password %><br>
+      <%= f.text_field :password %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation %><br>
+      <%= f.text_field :password_confirmation %>
+    </div>
+  </div>
+
+  <% if current_user.role == "admin" %>
+    <div class="form-group">
+      <%= f.select :role, ["admin", "editor"], selected: f.object.role %>
+    </div>
+  <% end %>
+
+  <br/>
+
+  <div class="form-group">
+    <%= f.submit "Save", class: "btn btn-success" %>
+    or
+    <%= link_to "Cancel", :back, class: "btn" %>
+  </div>
+<% end %>

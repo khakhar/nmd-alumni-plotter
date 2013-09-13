@@ -7,6 +7,7 @@ NidAlumni::Application.routes.draw do
   get "admin/tasks" => "admin#tasks", as: :admin_tasks
   post "admin/perform_task" => "admin#perform_task"
 
+  resources :members
   resources :expertise_areas
   resources :engagement_types
 
