@@ -56,7 +56,7 @@
           <ul class="nav navbar-nav navbar-right">
             <% if user_signed_in? %>
               <li>
-                <%= link_to "Account", member_path(current_user.id), method: :delete %>
+                <%= link_to "Account", edit_member_path(current_user.id) %>
               </li>
 
               <li>

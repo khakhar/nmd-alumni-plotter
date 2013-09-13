@@ -46,7 +46,7 @@ class MembersController < ApplicationController
   end
 
   def destroy
-    if @user.destroy
+    if @user.id != current_user.id && @user.destroy
       flash[:notice] = "The user has been removed"
     else
       flash[:notice] = "There was a problem removing that user"
