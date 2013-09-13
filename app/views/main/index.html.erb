@@ -33,7 +33,12 @@
     mapView.plot("Native");
 
     $("#search").keyup(function(event){
-      mapView.plot(mapView.currentPlotType, true, $("#search").val());
+      if($(this).val().trim().length > 0)
+        $(".clear-search").show();
+      else
+        $(".clear-search").hide();
+
+      mapView.plot(mapView.currentPlotType, true, $(this).val());
     });
 
     $(".clear-search").click(function(){
@@ -46,5 +51,7 @@
       $(this).parent().addClass("selected-plot");
       mapView.plot($(this).data("plot-type"));
     });
+
+    $(".clear-search").hide();
   });
 </script>
