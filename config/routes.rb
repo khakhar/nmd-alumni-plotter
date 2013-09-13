@@ -3,6 +3,8 @@ NidAlumni::Application.routes.draw do
   devise_for :users
   root to:  "main#index"
 
+  get "admin" => "admin#index", as: :admin
+
   resources :expertise_areas
   resources :engagement_types
 
