@@ -74,9 +74,19 @@ class window.MapView
 
     for studentId in studentIds
       student = @getStudent(studentId)
+
+      if opts.noDetail != true
+        detailMarkup = """
+          <div class='expertise'>#{student.expertise_area_name}</div>
+          #{if student.website? then "<div class='website'><a href='#{student.website}'>#{student.website}</a></div>" else ""}        
+        """
+      else
+        detailMarkup = ""
+
       markup += """
         <div class="student">
           <div class='student_name'>#{student.name}</div>
+          #{detailMarkup}
         </div>
       """
     opts['weight'] = studentIds.length
@@ -141,7 +151,7 @@ class window.MapView
         @getPlace(placeId).name
         marker = @createMarker(
           studentIds,
-          lat: @getPlace(placeId).latitude,
+          lat: @getPlace(placeId).latitude
           lng: @getPlace(placeId).longitude
           leafletId: "group-#{id}-#{placeId}"
           labelId:   "group-label-#{id}"
@@ -168,9 +178,10 @@ class window.MapView
         @getPlace(placeId).name
         marker = @createMarker(
           studentIds,
-          lat: @getPlace(placeId).latitude,
+          lat: @getPlace(placeId).latitude
           lng: @getPlace(placeId).longitude
           leafletId: "group-#{id}-#{placeId}"
+          noDetail: true
         )
 
       if @placesWithMarkers.indexOf(placeId) == -1

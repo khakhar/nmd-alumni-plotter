@@ -144,6 +144,9 @@
   .selected-item {
     background: #333;
   }
-
 }
 
+.leaflet-popup-content {
+  max-height: 10em;
+  overflow-y: scroll;
+}
