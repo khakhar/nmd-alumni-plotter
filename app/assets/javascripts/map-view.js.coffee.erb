@@ -77,8 +77,6 @@ class window.MapView
       markup += """
         <div class="student">
           <div class='student_name'>#{student.name}</div>
-          <div class='expertise'>#{student.expertise_area_name}</div>
-          #{if student.website? then "<div class='website'><a href='#{student.website}'>#{student.website}</a></div>" else ""}
         </div>
       """
     opts['weight'] = studentIds.length

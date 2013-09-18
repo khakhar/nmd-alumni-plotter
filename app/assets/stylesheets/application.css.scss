@@ -82,6 +82,8 @@
   width: 100%;
   float: left;
   clear: both;
+  padding-left: 1em;
+  padding-right: 1em;
 
   #search {
     width: 100%;
@@ -109,11 +111,18 @@
   background: rgba(133, 158, 235, 0.7);
   z-index: 10;
   border-radius: 3px;
-  padding: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
 
   .items {
-    float: left;
+    position: absolute;
     width: 100%;
+    top: 3.5em;
+    bottom: 1em;
+    float: left;
+    overflow-y: scroll;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
   .item {
