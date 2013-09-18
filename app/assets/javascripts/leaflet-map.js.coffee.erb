@@ -1,7 +1,7 @@
 class window.LeafletMap
   options:
     worldCenter:    new L.LatLng(37.3002752813443, 5.625)
-    indiaCenter:    new L.LatLng(22.248428704383624, 77.783203125)
+    indiaCenter:    new L.LatLng(21.759499730719817, 90.263671875)
     indiaZoomLevel: 5
     worldZoomLevel: 2
     cloudMade:
@@ -15,8 +15,21 @@ class window.LeafletMap
     @addCloudMadeLayer()
     @lmap.setView(@options.indiaCenter, @options.indiaZoomLevel)
     @markerLayer = L.layerGroup([])
+    @placeLayer  = L.layerGroup([])
     @lmap.addLayer(@markerLayer)
+    @lmap.addLayer(@placeLayer)
+    @lmap.on('zoomend', @onZoomend);
     @
+
+
+  onZoomend: ()=>
+    if(@lmap.getZoom()>=5 && !@lmap.hasLayer(@placeLayer))
+      @lmap.addLayer(@placeLayer)
+      for key, value of @placeLayer._layers
+        @placeLayer._layers[key].showLabel()
+
+    if(@lmap.getZoom()<5 && @lmap.hasLayer(@placeLayer))
+      @lmap.removeLayer(@placeLayer)
 
 
   setDefaultIconOnMarkers: (markerIds)->
@@ -57,7 +70,7 @@ class window.LeafletMap
     marker = L.marker(latlng, icon: @invisibleIcon())
     marker.setZIndexOffset(-100)
     marker.bindLabel(label, noHide: true)
-      .addTo(@markerLayer)
+      .addTo(@placeLayer)
       .showLabel()
 
 
@@ -88,6 +101,7 @@ class window.LeafletMap
 
   clear: ->
     @markerLayer.clearLayers()
+    @placeLayer.clearLayers()
 
 
   highlightIcon: (size = 1)->
