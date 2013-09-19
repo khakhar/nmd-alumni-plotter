@@ -24,7 +24,7 @@ class window.MapView
       )
 
 
-  populateNavList: ->
+  populateNavList: (appendTree=false)->
     ids = (groupId for groupId, attrs of @navListItems)
 
     sortedIds = ids.sort (a, b)=>
@@ -52,28 +52,34 @@ class window.MapView
         $item.append($itemLink)
 
 
-      $students = $("<div>").addClass("students")
-      for placeId, studentIds of @currentGroups[id]
-        for studentId in studentIds
-          $student  = $("<div>")
-            .addClass("student")
-            .html("- " + @getStudent(studentId).name)
-          $students.append($student)
+      if appendTree == true
+        $item.append(@getStudentsMarkupForOrganisation(id))
 
-      $item.append($students)
 
-      $itemLabel.click (event)=>
-        groupId   = $(event.target).data("group-id")
-        $(".item").removeClass("selected-item")
-        $(event.target).parent().addClass("selected-item")
-
-        @map.setDefaultIconOnMarkers(@previousMarkerIds)
-        for placeId, studentIds of @currentGroups[groupId]
-          @map.highlightMarker("group-#{groupId}-#{placeId}")
-          @previousMarkerIds.push "group-#{groupId}-#{placeId}"
-
+      $itemLabel.click @labelOnClick
       $(".nav-list .items").append($item)
 
+
+
+  getStudentsMarkupForOrganisation: (organisationId)->
+    $students = $("<div>").addClass("students")
+    for placeId, studentIds of @currentGroups[organisationId]
+      for studentId in studentIds
+        $student  = $("<div>")
+          .addClass("student")
+          .html("- " + @getStudent(studentId).name)
+        $students.append($student)
+    $students
+
+  labelOnClick: (event)=>
+    groupId   = $(event.target).data("group-id")
+    $(".item").removeClass("selected-item")
+    $(event.target).parent().addClass("selected-item")
+
+    @map.setDefaultIconOnMarkers(@previousMarkerIds)
+    for placeId, studentIds of @currentGroups[groupId]
+      @map.highlightMarker("group-#{groupId}-#{placeId}")
+      @previousMarkerIds.push "group-#{groupId}-#{placeId}"
 
   addItemToList: (name, groupId, website)->
     @navListItems[groupId] = {name: name, website: website}
@@ -214,6 +220,6 @@ class window.MapView
 
     @map.clear()
     @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
-    @populateNavList()
+    @populateNavList(plotBy != "Native")
     @addPlaceMarkers()
 
