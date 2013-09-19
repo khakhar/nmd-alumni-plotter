@@ -42,6 +42,7 @@ class window.MapView
 
       $item = $("<div>").addClass("item").append($itemLabel)
 
+
       if @navListItems[id].website?
         $itemLink  = $("<a>")
           .attr(
@@ -51,9 +52,18 @@ class window.MapView
         $item.append($itemLink)
 
 
+      $students = $("<div>").addClass("students")
+      for placeId, studentIds of @currentGroups[id]
+        for studentId in studentIds
+          $student  = $("<div>")
+            .addClass("student")
+            .html("- " + @getStudent(studentId).name)
+          $students.append($student)
+
+      $item.append($students)
+
       $itemLabel.click (event)=>
         groupId   = $(event.target).data("group-id")
-
         $(".item").removeClass("selected-item")
         $(event.target).parent().addClass("selected-item")
 

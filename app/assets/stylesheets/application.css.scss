@@ -139,10 +139,26 @@
       height: 0.6em;
       margin-left: 0.5em;
     }
+
+    .students {
+      display: none;
+      padding-left: 1em;
+
+      .student {
+        width: 100%;
+        color: #999;
+      }
+    }
   }
 
   .selected-item {
     background: #333;
+
+    .students {
+      display: block;
+      border-top: 1px solid #666;
+      padding-top: 0.5em;
+    }
   }
 }
 
