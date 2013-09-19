@@ -180,6 +180,7 @@ class window.MapView
           studentIds,
           lat: @getPlace(placeId).latitude
           lng: @getPlace(placeId).longitude
+          labelId:   "group-label-#{id}"
           leafletId: "group-#{id}-#{placeId}"
           noDetail: true
         )
