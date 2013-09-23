@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130913063818) do
+ActiveRecord::Schema.define(version: 20130923044230) do
+
+  create_table "backgrounds", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "engagement_types", force: true do |t|
     t.string   "name"
@@ -48,6 +54,7 @@ ActiveRecord::Schema.define(version: 20130913063818) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "website"
+    t.integer  "background_id"
   end
 
   create_table "users", force: true do |t|

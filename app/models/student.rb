@@ -2,11 +2,13 @@ class Student < ActiveRecord::Base
   has_many   :work_places
   belongs_to :place
   belongs_to :expertise_area
+  belongs_to :background
 
   include FlexiblePlace
   include Linkable
 
   validates_presence_of :name
+  validates_presence_of :background_id
   validates_presence_of :expertise_area_id
   validates_presence_of :place_id
 

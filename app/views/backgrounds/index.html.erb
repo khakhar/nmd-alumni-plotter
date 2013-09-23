@@ -1,0 +1,23 @@
+<h1>
+  Backgrounds
+  <%= link_to 'Add background', new_background_path, class: "btn btn-success pull-right" %>
+</h1>
+<hr/>
+
+<% @backgrounds.each do |background| %>
+  <div class="well well-sm">
+    <h3><%= background.name %></h3>
+    <%= link_to(
+      "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
+      edit_background_path(background),
+      class: "btn btn-primary btn-sm")
+    %>
+    <%= link_to(
+          "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
+          background,
+          class: "btn btn-danger btn-sm",
+          method: :delete, data: { confirm: 'Are you sure?' }
+        )
+    %>
+  </div>
+<% end %>

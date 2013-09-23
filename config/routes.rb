@@ -9,6 +9,7 @@ NidAlumni::Application.routes.draw do
 
   resources :members
   resources :expertise_areas
+  resources :backgrounds
   resources :engagement_types
 
   resources :organisations do

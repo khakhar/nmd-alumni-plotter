@@ -102,7 +102,6 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
 
 
   plot: (options={})->
-    console.log options
     @resetState(options)
 
     if !options.filterPlot
@@ -110,6 +109,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
     else
       @filterGroups(options.filterString)
 
+    console.log @tmpGroups
 
     for id, group of @tmpGroups
       @addItemToList(@getStudent(id).name, id, @getStudent(id).website)
