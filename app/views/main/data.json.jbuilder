@@ -7,6 +7,7 @@ json.students do |json|
       json.set! :expertise_area_name, student.expertise_area.name
       json.set! :website,             student.full_url
 
+      json.set! :project_title,           student.internship.try(:project_title)
       json.set! :current_work_place_id,   student.current_work_place.try(:id)
       json.set! :current_organisation_id, student.current_work_place.try(:organisation_id)
       json.set! :current_place_id,        student.current_work_place.try(:place_id)

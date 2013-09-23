@@ -1,0 +1,136 @@
+class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
+
+  populateNavList: ()->
+    # sort backgrounds by name
+    for backgroundId in @sortedIds(@tmpGroups, @backgroundSorter)
+      $background = $("<div class='background-name'>").html(@getBackground(backgroundId))
+      $(".nav-list .items").append($background)
+
+      orgIdsForBackground = []
+      for orgId, placeGroups of @tmpGroups[backgroundId]
+        orgIdsForBackground.push(orgId)
+
+
+      for orgId in orgIdsForBackground.sort(@organisationSorter)
+        organisation = @getOrganisation(orgId)
+        $orgLabel = $("<span>")
+          .attr(id: "group-label-#{orgId}")
+          .html(organisation.name)
+          .data("group-id", orgId)
+
+        $item = $("<div>").addClass("item").append($orgLabel)
+
+        if organisation.website?
+          $itemLink  = $("<a>")
+            .attr(
+              href: organisation.website
+              target: "_blank"
+            ).html("<img src='<%= asset_path('arrow.png') %>'/>")
+          $item.append($itemLink)
+
+        $orgLabel.click @labelOnClick
+
+        $students = $("<div>").addClass("students")
+        for placeId, studentIds in @tmpGroups[backgroundId][orgId]
+          for studentId in studentIds
+            student = @getStudent(studentId)
+            $studentMarkup = $("<a>").attr('href', student.website).html(student.name)
+            $student = $("<div>")
+              .addClass("student")
+              .html("- " + $studentMarkup)
+            $students.append($student)
+
+        $item.append($students)
+        $(".nav-list .items").append($item)
+
+
+
+  labelOnClick: (event)=>
+    groupId   = $(event.target).data("group-id")
+    $(".item").removeClass("selected-item")
+    $(event.target).parent().addClass("selected-item")
+
+    @mapView.map.setDefaultIconOnMarkers(@previousMarkerIds)
+    for placeId, studentIds of @currentGroups[groupId]
+      @map.highlightMarker("group-#{groupId}-#{placeId}")
+      @previousMarkerIds.push "group-#{groupId}-#{placeId}"
+
+
+  createMarker: (studentIds, opts) ->
+    markup = ""
+
+    for studentId in studentIds
+      student = @getStudent(studentId)
+      markup += """
+        <div class="student">
+          <div class='student_name'>#{student.name}</div>
+        </div>
+      """
+    opts['weight'] = studentIds.length
+    @mapView.map.createMarker markup, opts
+
+
+  groupData: ->
+    for studentId, student of @data.students
+      continue if !student.internship_place_id
+
+      backgroundId = student.background_id
+      orgId   = student.internship_organisation_id
+      placeId = student.internship_place_id
+
+      if !@currentGroups[backgroundId]
+        @currentGroups[backgroundId] = {}
+
+      if !@currentGroups[backgroundId][orgId]
+        @currentGroups[backgroundId][orgId] = {}
+
+      if !@currentGroups[backgroundId][orgId][placeId]
+        @currentGroups[backgroundId][orgId][placeId] = []
+      @currentGroups[backgroundId][orgId][placeId].push(student.id)
+
+    @tmpGroups = @currentGroups
+
+
+  # Trying to filter using currentGroups would be a nightmare for cleaning up data
+  filterGroups: (string)->
+    for studentId, student of @data.students
+      continue if !student.internship_place_id
+
+      organisation = @getOrganisation(student.internship_organisation_id)
+      continue if !organisation.name.match(new RegExp(string, "gi"))
+
+      backgroundId = student.background_id
+      orgId   = student.internship_organisation_id
+      placeId = student.internship_place_id
+
+      if !@tmpGroups[backgroundId]
+        @tmpGroups[backgroundId] = {}
+
+      if !@tmpGroups[backgroundId][orgId]
+        @tmpGroups[backgroundId][orgId] = {}
+
+      if !@tmpGroups[backgroundId][orgId][placeId]
+        @tmpGroups[backgroundId][orgId][placeId] = []
+      @tmpGroups[backgroundId][orgId][placeId].push(student.id)
+
+
+  plot: (options={})->
+    @resetState(options)
+
+    if !options.filter
+      @groupData()
+    else
+      @filterGroups(options.filterString)
+
+    for backgroundId, orgGroups of @tmpGroups
+      for orgId, placeGroups of orgGroups
+        for placeId, studentIds in placeGroups
+          place   = @getPlace(placeId)
+          marker  = @createMarker(
+            studentIds,
+            lat: @getPlace(placeId).latitude
+            lng: @getPlace(placeId).longitude
+            labelId:   "group-label-#{orgId}"
+          )
+
+    @populateNavList()

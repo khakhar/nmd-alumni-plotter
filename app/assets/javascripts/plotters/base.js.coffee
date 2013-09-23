@@ -10,6 +10,18 @@ class NmdPlot.Plotters.Base
   constructor: (@mapView, @data)->
 
 
+  getStudent:      (id)-> @data.students[id]
+  getOrganisation: (id)-> @data.organisations[id]
+  getPlace:        (id)-> @data.places[id]
+  getBackground:   (id)-> @data.backgrounds[id]
+
+
+  organisationSorter: (a, b)=>
+    if [@getOrganisation(a).name, @getOrganisation(b).name].sort().indexOf(@getOrganisation(a).name) == 0
+      return -1
+    return 1
+
+
   backgroundSorter: (a, b)=>
     if [@getBackground(a), @getBackground(b)].sort().indexOf(@getBackground(a)) == 0
       return -1
@@ -17,7 +29,7 @@ class NmdPlot.Plotters.Base
 
 
   studentSorter: (a, b)=>
-    if [@getStudent(a), @getStudent(b)].sort().indexOf(@getStudent(a)) == 0
+    if [@getStudent(a).name, @getStudent(b).name].sort().indexOf(@getStudent(a).name) == 0
       return -1
     return 1
 
@@ -50,18 +62,14 @@ class NmdPlot.Plotters.Base
     @currentGroups = {} if !options.filter
 
 
-  getStudent:      (id)-> @data.students[id]
-  getOrganisation: (id)-> @data.organisations[id]
-  getPlace:        (id)-> @data.places[id]
-  getBackground:   (id)-> @data.backgrounds[id]
-
-
   getStudentsMarkupForOrganisation: (organisationId)->
     $students = $("<div>").addClass("students")
     for placeId, studentIds of @currentGroups[organisationId]
       for studentId in studentIds
-        $student  = $("<div>")
+        student = @getStudent(studentId)
+        $studentMarkup = $("<a>").attr('href', student.website).html(student.name)
+        $student = $("<div>")
           .addClass("student")
-          .html("- " + @getStudent(studentId).name)
+          .html("- " + $studentMarkup)
         $students.append($student)
     $students

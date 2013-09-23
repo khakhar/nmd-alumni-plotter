@@ -81,6 +81,7 @@ class StudentsController < ApplicationController
         :expertise_area_id,
         work_places_attributes: [
           :id,
+          :project_title,
           :organisation_id, :organisation_name,
           :place_id, :place_name,
           :engagement_type_id,

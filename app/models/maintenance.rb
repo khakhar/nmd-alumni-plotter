@@ -112,6 +112,7 @@ class Maintenance
         organisation_id: all_organisations.sample.id,
         current: false,
         place_id: all_places.sample.id,
+        project_title: "",
         engagement_type_id: EngagementType.internship.id
       )
 

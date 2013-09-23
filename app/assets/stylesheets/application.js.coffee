@@ -11,6 +11,7 @@
 #= require init
 #= require plotters/base
 #= require plotters/native
+#= require plotters/internship
 #= require_tree .
 
 
