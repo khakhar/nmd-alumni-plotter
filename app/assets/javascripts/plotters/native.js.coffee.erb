@@ -1,7 +1,6 @@
 class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
 
 
-
   populateNavList: ()->
     # sort backgrounds by name
     for backgroundId in @sortedIds(@tmpGroups, @backgroundSorter)
@@ -96,7 +95,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
   plot: (options={})->
     @resetState(options)
 
-    if !options.filterPlot
+    if !options.filter
       @groupData()
     else
       @filterGroups(options.filterString)

@@ -157,11 +157,11 @@ class NmdPlot.MapView
         @placesWithMarkers.push(placeId)
 
 
-  plot: (plotBy, filterPlot=false, filterString="")=>
+  plot: (plotBy, filter=false, filterString="")=>
     $(".nav-list .items").empty()
     @map.clear()
 
-    if !filterPlot
+    if !filter
       @currentPlotter = new NmdPlot.Plotters[plotBy](@, @data)
       @currentPlotter.plot()
       $("#search").val("")
