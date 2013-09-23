@@ -10,6 +10,18 @@ class NmdPlot.Plotters.Base
   constructor: (@mapView, @data)->
 
 
+  backgroundSorter: (a, b)=>
+    if [@getBackground(a), @getBackground(b)].sort().indexOf(@getBackground(a)) == 0
+      return -1
+    return 1
+
+
+  studentSorter: (a, b)=>
+    if [@getStudent(a), @getStudent(b)].sort().indexOf(@getStudent(a)) == 0
+      return -1
+    return 1
+
+
   addPlace: (placeId)->
     return if @placesWithMarkers.indexOf(placeId) != -1
     @placesWithMarkers.push(placeId)
@@ -41,6 +53,7 @@ class NmdPlot.Plotters.Base
   getStudent:      (id)-> @data.students[id]
   getOrganisation: (id)-> @data.organisations[id]
   getPlace:        (id)-> @data.places[id]
+  getBackground:   (id)-> @data.backgrounds[id]
 
 
   getStudentsMarkupForOrganisation: (organisationId)->

@@ -25,7 +25,8 @@
   var data = <%= render(template: "main/data.json.jbuilder", locals: {
       organisations: @organisations,
       students: @students,
-      places: @places
+      places: @places,
+      backgrounds: @backgrounds
     }).html_safe %>;
 
   $(document).ready(function(){

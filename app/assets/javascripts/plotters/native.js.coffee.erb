@@ -1,22 +1,12 @@
 class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
 
-  backgroundSorter = (a, b)=>
-    if [@getBackground(a), @getBackground(b)].sort().indexOf(@getBackground(a)) == 0
-      return -1
-    return 1
-
-
-  studentSorter = (a, b)=>
-    if [@getStudent(a), @getStudent(b)].sort().indexOf(@getStudent(a)) == 0
-      return -1
-    return 1
 
 
   populateNavList: ()->
     # sort backgrounds by name
-    for backgroundId in @sortedIds(@tmpGroups, backgroundSorter)
+    for backgroundId in @sortedIds(@tmpGroups, @backgroundSorter)
       $background = $("<div class='background-name'>").html(@getBackground(backgroundId))
-      $(".nav-list .items").append($item)
+      $(".nav-list .items").append($background)
 
       # cumulate studentIds for background
       studentIdsForBackground = []
@@ -24,27 +14,28 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
         studentIdsForBackground = studentIdsForBackground.concat(studentIds)
 
       # sort students by name
-      for studentId in studentIdsForBackground.sort(studentSorter)
+      for studentId in studentIdsForBackground.sort(@studentSorter)
         studentId  = studentId
         student    = @getStudent(studentId)
+
         $itemLabel = $("<span>")
-          .attr(id: "group-label-#{id}")
+          .attr(id: "group-label-#{studentId}")
           .html(student.name)
-          .data("group-id", groupId)
+          .data("group-id", studentId)
 
         $item = $("<div>").addClass("item").append($itemLabel)
 
-        if @navListItems[id].website?
+        if student.website?
           $itemLink  = $("<a>")
             .attr(
-              href: @navListItems[id].website
+              href: student.website
               target: "_blank"
             ).html("<img src='<%= asset_path('arrow.png') %>'/>")
           $item.append($itemLink)
 
 
-      $itemLabel.click @labelOnClick
-      $(".nav-list .items").append($item)
+        $itemLabel.click @labelOnClick
+        $(".nav-list .items").append($item)
 
 
   labelOnClick: (event)=>
@@ -62,7 +53,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
     markup = ""
 
     for studentId in studentIds
-      student = NmdPlot.Utils.getStudent(studentId, data)
+      student = @getStudent(studentId)
       markup += """
         <div class="student">
           <div class='student_name'>#{student.name}</div>
@@ -82,6 +73,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
         @addPlace(student.place_id)
 
       @currentGroups[student.background_id][student.place_id].push(studentId)
+
     @tmpGroups = @currentGroups
 
 
@@ -109,18 +101,15 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
     else
       @filterGroups(options.filterString)
 
-    console.log @tmpGroups
-
-    for id, group of @tmpGroups
-      @addItemToList(@getStudent(id).name, id, @getStudent(id).website)
-      for placeId, studentIds of group
-        @getPlace(placeId).name
-        marker = @createMarker(
-          studentIds,
-          lat: @getPlace(placeId).latitude
-          lng: @getPlace(placeId).longitude
-          labelId:   "group-label-#{id}"
-          leafletId: "group-#{id}-#{placeId}"
-        )
+    for backgroundId, placeGroups of @tmpGroups
+      for placeId, studentIds of placeGroups
+        for studentId in studentIds
+          @getPlace(placeId).name
+          marker = @createMarker(
+            studentIds,
+            lat: @getPlace(placeId).latitude
+            lng: @getPlace(placeId).longitude
+            labelId:   "group-label-#{studentId}"
+          )
 
     @populateNavList()

@@ -9,6 +9,7 @@ class Maintenance
 
   def self.populate_with_samples!
     names = 10.times.collect { Faker::Name.name }
+    backgrounds = ["Computer Science", "Electronics", "Graphic Design", "Journalism"]
 
     cities = [
       "Mumbai",
@@ -83,6 +84,8 @@ class Maintenance
     ]
 
 
+    backgrounds.each { |background| Background.create(name: background) }
+
     organisations.each do |organisation|
       organisation = Organisation.find_or_initialize_by name: organisation
       organisation.website = Faker::Internet.url
@@ -92,12 +95,14 @@ class Maintenance
     cities.each { |city| Place.find_or_create_by(name: city) }
 
     all_places = Place.all
+    all_backgrounds    = Background.all
     all_organisations  = Organisation.all
     areas_of_expertise = ExpertiseArea.all
 
     names.each do |name|
       student = Student.find_or_initialize_by name: name
       student.place_id = all_places.sample.id
+      student.background_id = all_backgrounds.sample.id
       student.expertise_area_id = areas_of_expertise.sample.id
       student.website = Faker::Internet.url
       student.save
@@ -129,6 +134,7 @@ class Maintenance
 
       student = Student.new name: name
       student.place_id = first_sample.place_id
+      student.background_id = all_backgrounds.sample.id
       student.expertise_area_id = areas_of_expertise.sample.id
       student.website = Faker::Internet.url
       student.save

@@ -4,5 +4,6 @@ class MainController < ApplicationController
     @students = Student.includes(:expertise_area).load
     @organisations = Organisation.all
     @places = Place.all
+    @backgrounds = Background.all
   end
 end
