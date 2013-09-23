@@ -1,27 +1,12 @@
-class window.MapView
+class NmdPlot.MapView
   currentGroups: {}
   previousMarkerIds: []
   navListItems: {}
   placesWithMarkers: []
 
   constructor: (containerId, @data)->
-    @map = new LeafletMap(containerId)
+    @map = new NmdPlot.LeafletMap(containerId)
 
-
-  getStudent:      (id)-> @data.students[id]
-  getOrganisation: (id)-> @data.organisations[id]
-  getPlace:        (id)-> @data.places[id]
-
-
-
-  addPlaceMarkers: ()->
-    for placeId in @placesWithMarkers
-      place = @getPlace(placeId)
-      marker = @map.createPlaceLabel(
-        place.name,
-        lat: place.latitude,
-        lng: place.longitude
-      )
 
 
   populateNavList: (appendTree=false)->
@@ -60,17 +45,6 @@ class window.MapView
       $(".nav-list .items").append($item)
 
 
-
-  getStudentsMarkupForOrganisation: (organisationId)->
-    $students = $("<div>").addClass("students")
-    for placeId, studentIds of @currentGroups[organisationId]
-      for studentId in studentIds
-        $student  = $("<div>")
-          .addClass("student")
-          .html("- " + @getStudent(studentId).name)
-        $students.append($student)
-    $students
-
   labelOnClick: (event)=>
     groupId   = $(event.target).data("group-id")
     $(".item").removeClass("selected-item")
@@ -81,32 +55,10 @@ class window.MapView
       @map.highlightMarker("group-#{groupId}-#{placeId}")
       @previousMarkerIds.push "group-#{groupId}-#{placeId}"
 
+
   addItemToList: (name, groupId, website)->
     @navListItems[groupId] = {name: name, website: website}
 
-
-  createMarker: (studentIds, opts) ->
-    markup = ""
-
-    for studentId in studentIds
-      student = @getStudent(studentId)
-
-      if opts.noDetail != true
-        detailMarkup = """
-          <div class='expertise'>#{student.expertise_area_name}</div>
-          #{if student.website? then "<div class='website'><a href='#{student.website}'>#{student.website}</a></div>" else ""}        
-        """
-      else
-        detailMarkup = ""
-
-      markup += """
-        <div class="student">
-          <div class='student_name'>#{student.name}</div>
-          #{detailMarkup}
-        </div>
-      """
-    opts['weight'] = studentIds.length
-    @map.createMarker markup, opts
 
 
   markersByCurrentLocation: (opts)->
@@ -207,19 +159,11 @@ class window.MapView
 
   plot: (plotBy, filterPlot=false, filterString="")=>
     $(".nav-list .items").empty()
-
-    @currentPlotType   = plotBy
-    @navListItems      = []
-    @previousMarkerIds = []
-    @placesWithMarkers = []
-    @tmpGroups = {}
+    @map.clear()
 
     if !filterPlot
-      @currentGroups     = {}
+      @currentPlotter = new NmdPlot.Plotters[plotBy](@, @data)
+      @currentPlotter.plot()
       $("#search").val("")
-
-    @map.clear()
-    @["markersBy#{plotBy}Location"]({filterPlot: filterPlot, filterString: filterString})
-    @populateNavList(plotBy != "Native")
-    @addPlaceMarkers()
-
+    else 
+      @currentPlotter.plot(filter: true, filterString: filterString)

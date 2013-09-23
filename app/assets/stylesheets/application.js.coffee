@@ -1,3 +1,4 @@
+#= require_self
 #= require jquery
 #= require jquery_ujs
 #= require typeahead
@@ -8,4 +9,9 @@
 #= require leaflet-map
 #= require map-view
 #= require init
+#= require plotters/base
+#= require plotters/native
 #= require_tree .
+
+
+window.NmdPlot = {Plotters: {}}
