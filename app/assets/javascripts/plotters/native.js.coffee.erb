@@ -1,6 +1,5 @@
 class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
 
-
   populateNavList: ()->
     # sort backgrounds by name
     for backgroundId in @sortedIds(@tmpGroups, @backgroundSorter)
@@ -16,7 +15,6 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
       for studentId in studentIdsForBackground.sort(@studentSorter)
         studentId  = studentId
         student    = @getStudent(studentId)
-
         $itemLabel = $("<span>")
           .attr(id: "group-label-#{studentId}")
           .html(student.name)
@@ -31,7 +29,6 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
               target: "_blank"
             ).html("<img src='<%= asset_path('arrow.png') %>'/>")
           $item.append($itemLink)
-
 
         $itemLabel.click @labelOnClick
         $(".nav-list .items").append($item)

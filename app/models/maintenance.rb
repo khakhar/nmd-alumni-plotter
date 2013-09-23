@@ -4,6 +4,7 @@ class Maintenance
     WorkPlace.delete_all
     Organisation.delete_all
     Place.delete_all
+    Background.delete_all
   end
 
 
