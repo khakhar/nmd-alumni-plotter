@@ -25,19 +25,20 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
             .attr(
               href: organisation.website
               target: "_blank"
-            ).html("<img src='<%= asset_path('arrow.png') %>'/>")
+            ).html($("<img>").attr('src', '<%= asset_path('arrow.png') %>'))
           $item.append($itemLink)
 
         $orgLabel.click @labelOnClick
 
+
         $students = $("<div>").addClass("students")
-        for placeId, studentIds in @tmpGroups[backgroundId][orgId]
+        for placeId, studentIds of @tmpGroups[backgroundId][orgId]
           for studentId in studentIds
             student = @getStudent(studentId)
-            $studentMarkup = $("<a>").attr('href', student.website).html(student.name)
             $student = $("<div>")
               .addClass("student")
-              .html("- " + $studentMarkup)
+              .html("- ")
+            $student.append($("<a>").attr('href', student.website).html(student.name))
             $students.append($student)
 
         $item.append($students)
@@ -63,7 +64,8 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
       student = @getStudent(studentId)
       markup += """
         <div class="student">
-          <div class='student_name'>#{student.name}</div>
+          <div class='student-name'>#{student.name}</div>
+          <div class='project-title'>#{student.project_title}</div>
         </div>
       """
     opts['weight'] = studentIds.length
@@ -86,7 +88,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@currentGroups[backgroundId][orgId][placeId]
         @currentGroups[backgroundId][orgId][placeId] = []
-      @currentGroups[backgroundId][orgId][placeId].push(student.id)
+      @currentGroups[backgroundId][orgId][placeId].push(studentId)
 
     @tmpGroups = @currentGroups
 
@@ -111,7 +113,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@tmpGroups[backgroundId][orgId][placeId]
         @tmpGroups[backgroundId][orgId][placeId] = []
-      @tmpGroups[backgroundId][orgId][placeId].push(student.id)
+      @tmpGroups[backgroundId][orgId][placeId].push(studentId)
 
 
   plot: (options={})->
@@ -124,7 +126,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
     for backgroundId, orgGroups of @tmpGroups
       for orgId, placeGroups of orgGroups
-        for placeId, studentIds in placeGroups
+        for placeId, studentIds of placeGroups
           place   = @getPlace(placeId)
           marker  = @createMarker(
             studentIds,

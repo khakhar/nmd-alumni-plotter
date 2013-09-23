@@ -22,12 +22,12 @@
     .student {
       padding-bottom: 1em;
 
-      .student_name {
+      .student-name {
         font-size: 1.2em;
         font-weight: bold;
       }
 
-      .expertise_area {
+      .expertise_area, .project-title {
         color: #CCC;
       }
     }
@@ -147,6 +147,12 @@
       .student {
         width: 100%;
         color: #999;
+
+        a {
+          color: #999;
+          text-decoration: none;
+          &:hover { text-decoration: underline; }
+        }
       }
     }
   }
