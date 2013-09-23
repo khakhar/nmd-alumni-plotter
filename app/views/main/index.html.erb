@@ -30,7 +30,7 @@
     }).html_safe %>;
 
   $(document).ready(function(){
-    window.mapView = new NmdPlot.MapView('map', data);
+    window.mapView = new NmdPlot.View('map', data);
     mapView.plot("Native");
 
     $("#search").keyup(function(event){

@@ -1,11 +1,11 @@
-class NmdPlot.MapView
+class NmdPlot.View
   currentGroups: {}
   previousMarkerIds: []
   navListItems: {}
   placesWithMarkers: []
 
   constructor: (containerId, @data)->
-    @map = new NmdPlot.LeafletMap(containerId)
+    @map = new NmdPlot.Map(containerId)
 
 
   populateNavList: (appendTree=false)->

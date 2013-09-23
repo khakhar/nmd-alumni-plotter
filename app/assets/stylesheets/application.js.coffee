@@ -6,8 +6,8 @@
 #= require leaflet.label
 #= require cocoon
 #= require bootstrap
-#= require leaflet-map
-#= require map-view
+#= require map
+#= require view
 #= require init
 #= require plotters/base
 #= require plotters/native

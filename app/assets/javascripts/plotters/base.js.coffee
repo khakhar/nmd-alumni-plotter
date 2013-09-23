@@ -62,6 +62,16 @@ class NmdPlot.Plotters.Base
     @currentGroups = {} if !options.filter
 
 
+  markerId: ->
+    args = Array.prototype.slice.call(arguments)
+    "marker-#{args.join('-')}"
+
+
+  labelId: (groupId, placeId)->
+    args = Array.prototype.slice.call(arguments)
+    "label-#{args.join('-')}"
+
+
   getStudentsMarkupForOrganisation: (organisationId)->
     $students = $("<div>").addClass("students")
     for placeId, studentIds of @currentGroups[organisationId]

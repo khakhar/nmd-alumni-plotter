@@ -14,7 +14,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
       for orgId in orgIdsForBackground.sort(@organisationSorter)
         organisation = @getOrganisation(orgId)
         $orgLabel = $("<span>")
-          .attr(id: "group-label-#{orgId}")
+          .attr(id: "label-#{backgroundId}-#{orgId}")
           .html(organisation.name)
           .data("group-id", orgId)
 
@@ -53,8 +53,8 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
     @mapView.map.setDefaultIconOnMarkers(@previousMarkerIds)
     for placeId, studentIds of @currentGroups[groupId]
-      @map.highlightMarker("group-#{groupId}-#{placeId}")
-      @previousMarkerIds.push "group-#{groupId}-#{placeId}"
+      @mapView.map.highlightMarker("marker-#{groupId}-#{placeId}")
+      @previousMarkerIds.push("marker-#{groupId}-#{placeId}")
 
 
   createMarker: (studentIds, opts) ->
@@ -88,6 +88,8 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@currentGroups[backgroundId][orgId][placeId]
         @currentGroups[backgroundId][orgId][placeId] = []
+        @addPlace(student.place_id)
+
       @currentGroups[backgroundId][orgId][placeId].push(studentId)
 
     @tmpGroups = @currentGroups
@@ -113,6 +115,8 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@tmpGroups[backgroundId][orgId][placeId]
         @tmpGroups[backgroundId][orgId][placeId] = []
+        @addPlace(student.place_id)
+
       @tmpGroups[backgroundId][orgId][placeId].push(studentId)
 
 
@@ -132,7 +136,8 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
             studentIds,
             lat: @getPlace(placeId).latitude
             lng: @getPlace(placeId).longitude
-            labelId:   "group-label-#{orgId}"
+            labelId: "label-#{backgroundId}-#{orgId}"
+            leafletId: "marker-#{orgId}-#{placeId}"
           )
 
     @populateNavList()

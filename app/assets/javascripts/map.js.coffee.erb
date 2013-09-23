@@ -1,4 +1,4 @@
-class NmdPlot.LeafletMap
+class NmdPlot.Map
   options:
     worldCenter:    new L.LatLng(37.3002752813443, 5.625)
     indiaCenter:    new L.LatLng(21.759499730719817, 90.263671875)
@@ -90,6 +90,7 @@ class NmdPlot.LeafletMap
 
     marker.on "click", ->
       if marker.groupLabelId?
+        console.log marker.groupLabelId
         $("##{marker.groupLabelId}").click()
 
     marker.on "popupclose", =>
