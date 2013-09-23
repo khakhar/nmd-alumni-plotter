@@ -42,6 +42,7 @@ class NmdPlot.Plotters.Base
 
   addMarkerForPlace: (placeId)->
     place = @getPlace(placeId)
+    console.log place.name, placeId
     marker = @view.geo.createPlaceLabel(
       place.name,
       lat: place.latitude,

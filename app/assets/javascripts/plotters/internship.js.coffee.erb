@@ -51,7 +51,6 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
     @view.geo.setDefaultIconOnMarkers(@previousMarkerIds)
     for placeId, studentIds of @currentGroups[uniqueIds[0]][uniqueIds[1]]
-      console.log @markerId(uniqueIds[0], uniqueIds[1], placeId)
       @view.geo.highlightMarker(@markerId(uniqueIds[0], uniqueIds[1], placeId))
       @previousMarkerIds.push @markerId(uniqueIds[0], uniqueIds[1], placeId)
 
@@ -87,7 +86,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@currentGroups[backgroundId][orgId][placeId]
         @currentGroups[backgroundId][orgId][placeId] = []
-        @addPlace(student.place_id)
+        @addPlace(placeId)
 
       @currentGroups[backgroundId][orgId][placeId].push(studentId)
 
@@ -114,7 +113,7 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
       if !@tmpGroups[backgroundId][orgId][placeId]
         @tmpGroups[backgroundId][orgId][placeId] = []
-        @addPlace(student.place_id)
+        @addPlace(placeId)
 
       @tmpGroups[backgroundId][orgId][placeId].push(studentId)
 
