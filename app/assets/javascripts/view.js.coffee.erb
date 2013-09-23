@@ -5,7 +5,7 @@ class NmdPlot.View
   placesWithMarkers: []
 
   constructor: (containerId, @data)->
-    @map = new NmdPlot.Map(containerId)
+    @geo = new NmdPlot.Map(containerId)
 
 
   populateNavList: (appendTree=false)->
@@ -49,9 +49,9 @@ class NmdPlot.View
     $(".item").removeClass("selected-item")
     $(event.target).parent().addClass("selected-item")
 
-    @map.setDefaultIconOnMarkers(@previousMarkerIds)
+    @geo.setDefaultIconOnMarkers(@previousMarkerIds)
     for placeId, studentIds of @currentGroups[groupId]
-      @map.highlightMarker("group-#{groupId}-#{placeId}")
+      @geo.highlightMarker("group-#{groupId}-#{placeId}")
       @previousMarkerIds.push "group-#{groupId}-#{placeId}"
 
 
@@ -158,7 +158,7 @@ class NmdPlot.View
 
   plot: (plotBy, filter=false, filterString="")=>
     $(".nav-list .items").empty()
-    @map.clear()
+    @geo.clear()
 
     if !filter
       @currentPlotter = new NmdPlot.Plotters[plotBy](@, @data)

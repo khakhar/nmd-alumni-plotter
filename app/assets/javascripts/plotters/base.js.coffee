@@ -7,7 +7,7 @@ class NmdPlot.Plotters.Base
   tmpGroups: {}
 
 
-  constructor: (@mapView, @data)->
+  constructor: (@view, @data)->
 
 
   getStudent:      (id)-> @data.students[id]
@@ -42,7 +42,7 @@ class NmdPlot.Plotters.Base
 
   addMarkerForPlace: (placeId)->
     place = @getPlace(placeId)
-    marker = @mapView.map.createPlaceLabel(
+    marker = @view.geo.createPlaceLabel(
       place.name,
       lat: place.latitude,
       lng: place.longitude

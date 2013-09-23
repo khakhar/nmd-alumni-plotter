@@ -41,9 +41,9 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
     $(".item").removeClass("selected-item")
     $(event.target).parent().addClass("selected-item")
 
-    @mapView.map.setDefaultIconOnMarkers(@previousMarkerIds)
+    @view.geo.setDefaultIconOnMarkers(@previousMarkerIds)
     for studentId in @currentGroups[uniqueIds[0]][uniqueIds[1]]
-      @mapView.map.highlightMarker(@markerId(uniqueIds[0], uniqueIds[1], studentId))
+      @view.geo.highlightMarker(@markerId(uniqueIds[0], uniqueIds[1], studentId))
       @previousMarkerIds.push @markerId(uniqueIds[0], uniqueIds[1], studentId)
 
 
@@ -59,7 +59,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
         </div>
       """
     opts['weight'] = studentIds.length
-    @mapView.map.createMarker markup, opts
+    @view.geo.createMarker markup, opts
 
 
   groupData: ->
