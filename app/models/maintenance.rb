@@ -112,7 +112,7 @@ class Maintenance
         organisation_id: all_organisations.sample.id,
         current: false,
         place_id: all_places.sample.id,
-        project_title: "",
+        project_title: Faker::Lorem.words.join(" "),
         engagement_type_id: EngagementType.internship.id
       )
 
@@ -145,6 +145,7 @@ class Maintenance
         organisation_id: first_sample.internship.organisation_id,
         current: false,
         place_id: first_sample.internship.place_id,
+        project_title: Faker::Lorem.words.join(" "),
         engagement_type_id: EngagementType.internship.id
       )
 
