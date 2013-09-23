@@ -9,7 +9,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
 
       # cumulate studentIds for background
       studentIdsForBackground = []
-      for placeId, studentIds of @currentGroups[backgroundId]
+      for placeId, studentIds of @tmpGroups[backgroundId]
         studentIdsForBackground = studentIdsForBackground.concat(studentIds)
 
       # sort students by name
@@ -80,7 +80,6 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
   filterGroups: (string)->
     for studentId, student of @data.students
       continue if !student.name.match(new RegExp(string, "gi"))
-
       if !@tmpGroups[student.background_id]
         @tmpGroups[student.background_id] = {}
 
@@ -89,7 +88,6 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
         @addPlace(student.place_id)
 
       @tmpGroups[student.background_id][student.place_id].push(studentId)
-
 
 
   plot: (options={})->

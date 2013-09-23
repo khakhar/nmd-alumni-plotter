@@ -47,7 +47,7 @@ class NmdPlot.Plotters.Base
     @previousMarkerIds = []
     @placesWithMarkers = []
     @tmpGroups = {}
-    @currentGroups = {} if !options.filterPlot
+    @currentGroups = {} if !options.filter
 
 
   getStudent:      (id)-> @data.students[id]
