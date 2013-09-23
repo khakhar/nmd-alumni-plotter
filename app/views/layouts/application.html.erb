@@ -35,8 +35,12 @@
                 <%= link_to "Students", students_path %>
               </li>
 
+              <li <%= 'class=active' if params[:controller] == "backgrounds" %>>
+                <%= link_to "Backgrounds", backgrounds_path %>
+              </li>
+
               <li <%= 'class=active' if params[:controller] == "expertise_areas" %>>
-                <%= link_to "Areas of expertise", expertise_areas_path %>
+                <%= link_to "Expertises", expertise_areas_path %>
               </li>
 
               <li <%= 'class=active' if params[:controller] == "places" %>>
