@@ -84,7 +84,7 @@ class Maintenance
     ]
 
 
-    backgrounds.each { |background| Background.create(name: background) }
+    backgrounds.each { |background| Background.find_or_create_by(name: background) }
 
     organisations.each do |organisation|
       organisation = Organisation.find_or_initialize_by name: organisation
