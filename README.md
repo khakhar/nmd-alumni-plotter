@@ -22,6 +22,8 @@
 
         bundle exec rake populate_samples
 
+  * Once populated, the `admin` can login at `/admin`, with the email address `admin@example.com` with the password `password`
+
 * Rake task to clear user entered data from the database
 
         bundle exec rake clear_data
