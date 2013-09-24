@@ -9,4 +9,15 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-NidAlumni::Application.config.secret_key_base = 'bbd1fb653eacca123080484663addcbeb3cf289ab7455882731bde6a423ea3c1d9c169cbef113ab4371270f91691b9a95340a5244e62bffe15008925ddbaee8f'
+
+require 'securerandom'
+
+def find_secret_token
+  secret_file = Rails.root.join ".secret"
+  return File.read(secret_file).chomp if File.exist?(secret_file)
+  secret = SecureRandom.hex(64)
+  File.write(secret_file, secret)
+  secret
+end
+
+NmdAlumni::Application.config.secret_key_base = find_secret_token

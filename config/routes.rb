@@ -1,4 +1,4 @@
-NidAlumni::Application.routes.draw do
+NmdAlumni::Application.routes.draw do
 
   devise_for :users
   root to:  "main#index"

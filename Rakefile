@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-NidAlumni::Application.load_tasks
+NmdAlumni::Application.load_tasks
