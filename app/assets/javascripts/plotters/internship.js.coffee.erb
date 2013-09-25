@@ -1,45 +1,40 @@
 class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
 
   populateNavList: ()->
-    # sort backgrounds by name
-    for backgroundId in @sortedIds(@tmpGroups, @backgroundSorter)
-      $background = $("<div class='background-name'>").html(@getBackground(backgroundId))
-      $(".nav-list .items").append($background)
+    orgIds = []
+    for orgId, placeGroups of @tmpGroups
+      orgIds.push(orgId)
 
-      orgIdsForBackground = []
-      for orgId, placeGroups of @tmpGroups[backgroundId]
-        orgIdsForBackground.push(orgId)
+    for orgId in orgIds.sort(@organisationSorter)
+      organisation = @getOrganisation(orgId)
+      $orgLabel = $("<span>")
+        .attr(id: @labelId(orgId))
+        .data('unique-ids', [orgId])
+        .html(organisation.name)
+      $item = $("<div>").addClass("item").append($orgLabel)
 
-      for orgId in orgIdsForBackground.sort(@organisationSorter)
-        organisation = @getOrganisation(orgId)
-        $orgLabel = $("<span>")
-          .attr(id: @labelId(backgroundId, orgId))
-          .data('unique-ids', [backgroundId, orgId])
-          .html(organisation.name)
-        $item = $("<div>").addClass("item").append($orgLabel)
+      if organisation.website?
+        $itemLink  = $("<a>")
+          .attr(
+            href: organisation.website
+            target: "_blank"
+          ).html($("<img>").attr('src', '<%= asset_path('arrow.png') %>'))
+        $item.append($itemLink)
 
-        if organisation.website?
-          $itemLink  = $("<a>")
-            .attr(
-              href: organisation.website
-              target: "_blank"
-            ).html($("<img>").attr('src', '<%= asset_path('arrow.png') %>'))
-          $item.append($itemLink)
+      $orgLabel.click @labelOnClick
 
-        $orgLabel.click @labelOnClick
+      $students = $("<div>").addClass("students")
+      for placeId, studentIds of @tmpGroups[orgId]
+        for studentId in studentIds
+          student = @getStudent(studentId)
+          $student = $("<div>")
+            .addClass("student")
+            .html("- ")
+          $student.append($("<a>").attr('href', student.website).html(student.name))
+          $students.append($student)
 
-        $students = $("<div>").addClass("students")
-        for placeId, studentIds of @tmpGroups[backgroundId][orgId]
-          for studentId in studentIds
-            student = @getStudent(studentId)
-            $student = $("<div>")
-              .addClass("student")
-              .html("- ")
-            $student.append($("<a>").attr('href', student.website).html(student.name))
-            $students.append($student)
-
-        $item.append($students)
-        $(".nav-list .items").append($item)
+      $item.append($students)
+      $(".nav-list .items").append($item)
 
 
 
@@ -50,9 +45,9 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
     $(event.target).parent().addClass("selected-item")
 
     @view.geo.setDefaultIconOnMarkers(@previousMarkerIds)
-    for placeId, studentIds of @currentGroups[uniqueIds[0]][uniqueIds[1]]
-      @view.geo.highlightMarker(@markerId(uniqueIds[0], uniqueIds[1], placeId))
-      @previousMarkerIds.push @markerId(uniqueIds[0], uniqueIds[1], placeId)
+    for placeId, studentIds of @currentGroups[uniqueIds[0]]
+      @view.geo.highlightMarker(@markerId(uniqueIds[0], placeId))
+      @previousMarkerIds.push @markerId(uniqueIds[0], placeId)
 
 
   createMarker: (studentIds, opts) ->
@@ -74,21 +69,17 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
     for studentId, student of @data.students
       continue if !student.internship_place_id
 
-      backgroundId = student.background_id
       orgId   = student.internship_organisation_id
       placeId = student.internship_place_id
 
-      if !@currentGroups[backgroundId]
-        @currentGroups[backgroundId] = {}
+      if !@currentGroups[orgId]
+        @currentGroups[orgId] = {}
 
-      if !@currentGroups[backgroundId][orgId]
-        @currentGroups[backgroundId][orgId] = {}
-
-      if !@currentGroups[backgroundId][orgId][placeId]
-        @currentGroups[backgroundId][orgId][placeId] = []
+      if !@currentGroups[orgId][placeId]
+        @currentGroups[orgId][placeId] = []
         @addPlace(placeId)
 
-      @currentGroups[backgroundId][orgId][placeId].push(studentId)
+      @currentGroups[orgId][placeId].push(studentId)
 
     @tmpGroups = @currentGroups
 
@@ -101,21 +92,17 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
       organisation = @getOrganisation(student.internship_organisation_id)
       continue if !organisation.name.match(new RegExp(string, "gi"))
 
-      backgroundId = student.background_id
       orgId   = student.internship_organisation_id
       placeId = student.internship_place_id
 
-      if !@tmpGroups[backgroundId]
-        @tmpGroups[backgroundId] = {}
+      if !@tmpGroups[orgId]
+        @tmpGroups[orgId] = {}
 
-      if !@tmpGroups[backgroundId][orgId]
-        @tmpGroups[backgroundId][orgId] = {}
-
-      if !@tmpGroups[backgroundId][orgId][placeId]
-        @tmpGroups[backgroundId][orgId][placeId] = []
+      if !@tmpGroups[orgId][placeId]
+        @tmpGroups[orgId][placeId] = []
         @addPlace(placeId)
 
-      @tmpGroups[backgroundId][orgId][placeId].push(studentId)
+      @tmpGroups[orgId][placeId].push(studentId)
 
 
   plot: (options={})->
@@ -126,16 +113,15 @@ class NmdPlot.Plotters.Internship extends NmdPlot.Plotters.Base
     else
       @filterGroups(options.filterString)
 
-    for backgroundId, orgGroups of @tmpGroups
-      for orgId, placeGroups of orgGroups
-        for placeId, studentIds of placeGroups
-          place   = @getPlace(placeId)
-          marker  = @createMarker(
-            studentIds,
-            lat: @getPlace(placeId).latitude
-            lng: @getPlace(placeId).longitude
-            labelId: @labelId(backgroundId, orgId)
-            leafletId: @markerId(backgroundId, orgId, placeId)
-          )
+    for orgId, placeGroups of @tmpGroups
+      for placeId, studentIds of placeGroups
+        place   = @getPlace(placeId)
+        marker  = @createMarker(
+          studentIds,
+          lat: @getPlace(placeId).latitude
+          lng: @getPlace(placeId).longitude
+          labelId: @labelId(orgId)
+          leafletId: @markerId(orgId, placeId)
+        )
 
     @populateNavList()
