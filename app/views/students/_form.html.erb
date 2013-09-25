@@ -36,6 +36,11 @@
     <%= f.select :expertise_area_id, ExpertiseArea.all.pluck(:name, :id) %>
   </div>
 
+  <div class="form-group">
+    <%= f.label :background_id, "Background" %><br>
+    <%= f.select :background_id, Background.all.pluck(:name, :id) %>
+  </div>
+
   <br/>
   <h2>
     Work places

@@ -79,6 +79,7 @@ class StudentsController < ApplicationController
         :website,
         :place_id,
         :expertise_area_id,
+        :background_id,
         work_places_attributes: [
           :id,
           :project_title,
