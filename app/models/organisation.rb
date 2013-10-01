@@ -1,5 +1,5 @@
 class Organisation < ActiveRecord::Base
-  has_many :work_places
+  has_many :work_places, inverse_of: :organisation
 
   include Searchable
   include Linkable

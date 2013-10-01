@@ -2,6 +2,15 @@ class BackgroundsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_background, only: [:show, :edit, :update, :destroy]
 
+
+  def search
+    @backgrounds = Background.find_like(params[:q]).select(:name)
+    respond_to do |format|
+      format.json { render json: @backgrounds.pluck(:name) }
+    end
+  end
+
+
   def index
     @backgrounds = Background.all
   end

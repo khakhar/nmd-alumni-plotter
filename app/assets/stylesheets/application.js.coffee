@@ -1,6 +1,8 @@
 #= require_self
 #= require jquery
 #= require jquery_ujs
+#= require jquery.ui.widget
+#= require jquery.ui.sortable
 #= require typeahead
 #= require leaflet
 #= require leaflet.label

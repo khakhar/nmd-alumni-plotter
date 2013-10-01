@@ -5,7 +5,6 @@ json.students do |json|
       json.set! :place_id,            student.place_id
 
       json.set! :background_id,       student.background_id
-      json.set! :background_name,     student.background.name
 
       json.set! :expertise_area_name, student.expertise_area.name
       json.set! :website,             student.full_url
@@ -29,6 +28,7 @@ json.places do |json|
       json.name      place.name
       json.latitude  place.latitude
       json.longitude place.longitude
+      json.country_code place.country_code
     end
   end
 end

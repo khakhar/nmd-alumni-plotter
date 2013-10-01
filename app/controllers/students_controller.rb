@@ -44,7 +44,7 @@ class StudentsController < ApplicationController
   def update
     @student.place_name = params[:student][:place_name]
     respond_to do |format|
-      if @student.update(student_params)
+      if @student.update_attributes(student_params)
         format.html { redirect_to @student, notice: 'Student was successfully updated.' }
         format.json { head :no_content }
       else
@@ -79,11 +79,12 @@ class StudentsController < ApplicationController
         :website,
         :place_id,
         :expertise_area_id,
-        :background_id,
+        :approved,
+        student_backgrounds_attributes: [:id, :background_name, :background_order, :_destroy],
         work_places_attributes: [
           :id,
           :project_title,
-          :organisation_id, :organisation_name,
+          :organisation_id, :organisation_name, :organisation_website,
           :place_id, :place_name,
           :engagement_type_id,
           :current,

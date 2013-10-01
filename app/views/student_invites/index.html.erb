@@ -1,0 +1,45 @@
+<h1>
+  Student invites
+  <div class="pull-right">
+    <%= link_to 'Add student invite', new_student_invite_path, class: "btn btn-success" %>
+    <%= link_to 'Delete only used invites', delete_multiple_student_invites_path(delete_option: "expired"), class: "btn btn-danger", confirm: "Do you really want to delete USED invites?" %>
+    <%= link_to 'Delete all', delete_multiple_student_invites_path(delete_option: "all"), class: "btn btn-danger", confirm: "Do you really want to delete ALL invites?" %>
+  </div>
+</h1>
+<hr/>
+
+<% if @student_invites.count > 0 %>
+  <% @student_invites.each do |student_invite| %>
+    <div class="well well-sm">
+      <h3><%= student_invite.name %>, <%= student_invite.email %></h3>
+      <p>
+        <% if student_invite.student_id.blank? %>
+          Not yet filled
+        <% else %>
+          <%= link_to "View filled invite", student_path(student_invite.student_id) %>
+        <% end %>
+      </p>
+      <%= link_to(
+            "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
+            edit_student_invite_path(student_invite),
+            class: "btn btn-primary btn-sm")
+      %>
+      <%= link_to(
+            "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
+            student_invite,
+            method: :delete,
+            class: "btn btn-danger btn-sm",
+            data: { confirm: 'Are you sure?' })
+      %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="jumbotron">
+    <div class="container">
+      <h3>There are no invites!</h3>
+      <p>
+        <%= link_to "Click here to add one", new_student_invite_path, class: "btn btn-primary btn-large" %>
+      </p>
+    </div>
+  </div>
+<% end %>

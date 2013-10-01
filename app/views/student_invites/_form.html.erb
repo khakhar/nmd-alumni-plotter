@@ -1,0 +1,37 @@
+<%= form_for(@student_invite) do |f| %>
+  <% if @student_invite.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@student_invite.errors.count, "error") %> prohibited this student invite from being saved:</h2>
+
+      <ul>
+      <% @student_invite.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email %><br>
+    <%= f.text_field :email %>
+  </div>
+
+  <% if f.object.persisted? %>
+    <div class="form-group">
+      <% if f.object.student_id %>
+        This student filled up the form. <%= link_to "Click here to view it", student_path(f.object.student_id) %>
+      <% else %>
+        This student has not filled up the form
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.submit class: "btn btn-default" %>
+  </div>
+<% end %>

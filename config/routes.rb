@@ -9,8 +9,20 @@ NmdAlumni::Application.routes.draw do
 
   resources :members
   resources :expertise_areas
-  resources :backgrounds
   resources :engagement_types
+
+  resources :student_invites do
+    collection do
+      get :upload
+      get :delete_multiple
+    end
+  end
+
+  resources :backgrounds do
+    collection do
+      get :search
+    end
+  end
 
   resources :organisations do
     collection do

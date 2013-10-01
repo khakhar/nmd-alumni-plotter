@@ -55,7 +55,7 @@ class NmdPlot.Plotters.Native extends NmdPlot.Plotters.Base
       markup += """
         <div class="student">
           <div class='student-name'>#{student.name}</div>
-          <div class='background-name'>#{student.background_name}</div>
+          <div class='background-name'>#{@getBackground(student.background_id)}</div>
         </div>
       """
     opts['weight'] = studentIds.length

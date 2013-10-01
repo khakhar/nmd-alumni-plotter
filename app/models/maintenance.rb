@@ -103,10 +103,18 @@ class Maintenance
     names.each do |name|
       student = Student.find_or_initialize_by name: name
       student.place_id = all_places.sample.id
-      student.background_id = all_backgrounds.sample.id
       student.expertise_area_id = areas_of_expertise.sample.id
       student.website = Faker::Internet.url
       student.save
+
+      background_samples = all_backgrounds.sample(2)
+
+      2.times.each do |i|
+        puts background_samples[i].id
+        student_background = student.student_backgrounds.build background_id: background_samples[i].id
+        student_background.chosen = true if i == 1
+        student_background.save
+      end
 
       student.work_places.create(
         organisation_id: all_organisations.sample.id,
@@ -127,7 +135,7 @@ class Maintenance
 
     all_students = Student.all
 
-    # More students to have the same workplace as te before ones
+    # More students to have the same workplace as the before ones
     10.times.collect do
       name = Faker::Name.name
 
@@ -136,10 +144,18 @@ class Maintenance
 
       student = Student.new name: name
       student.place_id = first_sample.place_id
-      student.background_id = all_backgrounds.sample.id
       student.expertise_area_id = areas_of_expertise.sample.id
       student.website = Faker::Internet.url
       student.save
+
+      background_samples = all_backgrounds.sample(2)
+
+      2.times.each do |i|
+        puts background_samples[i].id
+        student_background = student.student_backgrounds.build background_id: background_samples[i].id
+        student_background.chosen = true if i == 1
+        student_background.save
+      end
 
       student.work_places.create(
         organisation_id: first_sample.internship.organisation_id,

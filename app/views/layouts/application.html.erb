@@ -35,24 +35,23 @@
                 <%= link_to "Students", students_path %>
               </li>
 
-              <li <%= 'class=active' if params[:controller] == "backgrounds" %>>
-                <%= link_to "Backgrounds", backgrounds_path %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Support data <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Backgrounds", backgrounds_path %></li>
+                  <li><%= link_to "Engagement Types", engagement_types_path %></li>
+                  <li><%= link_to "Expertises", expertise_areas_path %></li>
+                  <li><%= link_to "Organisations", organisations_path %></li>
+                  <li><%= link_to "Places", places_path %></li>
+                </ul>
               </li>
 
-              <li <%= 'class=active' if params[:controller] == "expertise_areas" %>>
-                <%= link_to "Expertises", expertise_areas_path %>
+              <li <%= 'class=active' if params[:controller] == "members" %>>
+                <%= link_to "Users", members_path %>
               </li>
 
-              <li <%= 'class=active' if params[:controller] == "places" %>>
-                <%= link_to "Places", places_path %>
-              </li>
-
-              <li <%= 'class=active' if params[:controller] == "organisations" %>>
-                <%= link_to "Organisations", organisations_path %>
-              </li>
-
-              <li <%= 'class=active' if params[:controller] == "engagement_types" %>>
-                <%= link_to "Engagement Types", engagement_types_path %>
+              <li <%= 'class=active' if params[:controller] == "student_invites" %>>
+                <%= link_to "Student invites", student_invites_path %>
               </li>
             </ul>
           <% end %>

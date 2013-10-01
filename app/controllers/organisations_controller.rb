@@ -4,9 +4,9 @@ class OrganisationsController < ApplicationController
 
 
   def search
-    @organisations = Organisation.find_like(params[:q]).select(:name)
+    @organisations = Organisation.find_like(params[:q]).select(:name, :website)
     respond_to do |format|
-      format.json { render json: @organisations.pluck(:name).flatten }
+      format.json { render json: @organisations }
     end
   end
 

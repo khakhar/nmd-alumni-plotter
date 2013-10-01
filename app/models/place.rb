@@ -1,6 +1,6 @@
 class Place < ActiveRecord::Base
-  has_many :students
-  has_many :work_places
+  has_many :students,    inverse_of: :place
+  has_many :work_places, inverse_of: :place
 
   include Geocodable
   include Searchable

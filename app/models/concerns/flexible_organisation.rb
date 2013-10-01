@@ -2,12 +2,27 @@ module FlexibleOrganisation
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :organisation_name
     before_save :ensure_organisation_id
 
 
     def organisation_name
       self.organisation.name if self.organisation
+    end
+
+    def organisation_website
+      self.organisation.website if self.organisation
+    end
+
+
+    def organisation_name=(value)
+      @organisation_name = value
+      attribute_will_change!(:organisation_name)
+    end
+
+
+    def organisation_website=(value)
+      @organisation_website = value
+      attribute_will_change!(:organisation_website)
     end
 
 
@@ -19,7 +34,10 @@ module FlexibleOrganisation
       if search.length > 0
         organisation = search.first
       else
-        organisation = Organisation.create name: @organisation_name
+        organisation = Organisation.create(
+          name: @organisation_name,
+          website: @organisation_website
+        )
       end
 
       self.organisation_id = organisation.id

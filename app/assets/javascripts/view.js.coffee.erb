@@ -5,6 +5,7 @@ class NmdPlot.View
 
 
   plot: (plotBy, filter=false, filterString="")=>
+    @geo.setIndiaView()
     $(".nav-list .items").empty()
     @geo.clear()
 

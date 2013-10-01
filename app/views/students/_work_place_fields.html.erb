@@ -1,11 +1,12 @@
-<div class="panel panel-default nested-fields">
+<div class="panel panel-default nested-fields work-place">
 
   <div class="panel-heading">
     <h3 class="panel-title">
       <%= f.select(
           :engagement_type_id,
           EngagementType.all.collect {|i| [i.name, i.id]},
-          selected: f.object.engagement_type_id
+          {selected: f.object.engagement_type_id},
+          {class: "engagement_type_id"}
         ) %>
     </h3>
   </div>
@@ -16,12 +17,17 @@
       <%= f.text_field :organisation_name, class: "organisation_name", autocomplete: "off", spellcheck: "off" %>
     </div>
 
+    <div class="form-group organisation-website-wrapper">
+      <%= f.label :organisation_website %><br/>
+      <%= f.text_field :organisation_website, class: "organisation_website", autocomplete: "off", spellcheck: "off" %>
+    </div>
+
     <div class="form-group">
       <%= f.label :place_name %><br/>
       <%= f.text_field :place_name, class: "place_name", autocomplete: "off", spellcheck: "off" %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group project-title-wrapper">
       <%= f.label :project_title %><br/>
       <%= f.text_field :project_title, class: "project_title" %>
     </div>

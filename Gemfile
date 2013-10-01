@@ -11,6 +11,7 @@ gem 'cocoon'
 gem 'geocoder'
 gem 'faker'
 gem 'carmen-rails', '~> 1.0.0', github: 'jim/carmen-rails'
+gem 'jquery-ui-rails'
 
 # Use sqlite3 as the database for Active Record
 gem 'pg'

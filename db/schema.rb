@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130923082322) do
+ActiveRecord::Schema.define(version: 20131002014022) do
 
   create_table "backgrounds", force: true do |t|
     t.string   "name"
@@ -47,6 +47,24 @@ ActiveRecord::Schema.define(version: 20130923082322) do
     t.text     "longitude"
   end
 
+  create_table "student_backgrounds", force: true do |t|
+    t.integer  "student_id"
+    t.integer  "background_id"
+    t.boolean  "chosen",           default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "background_order", default: 0
+  end
+
+  create_table "student_invites", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.text     "token"
+    t.integer  "student_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "students", force: true do |t|
     t.string   "name"
     t.integer  "place_id"
@@ -54,7 +72,7 @@ ActiveRecord::Schema.define(version: 20130923082322) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "website"
-    t.integer  "background_id"
+    t.boolean  "approved",          default: true
   end
 
   create_table "users", force: true do |t|

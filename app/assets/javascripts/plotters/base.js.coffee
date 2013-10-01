@@ -42,7 +42,9 @@ class NmdPlot.Plotters.Base
 
   addMarkerForPlace: (placeId)->
     place = @getPlace(placeId)
-    console.log place.name, placeId
+    if @view.geo.view == "india" && place.country_code!="IN"
+      @view.geo.setWorldView()
+
     marker = @view.geo.createPlaceLabel(
       place.name,
       lat: place.latitude,

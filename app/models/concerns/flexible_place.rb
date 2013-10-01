@@ -2,12 +2,17 @@ module FlexiblePlace
   extend ActiveSupport::Concern
 
   included do
-    attr_accessor :place_name
     before_validation   :ensure_place_id
 
 
     def place_name
       self.place.name if self.place
+    end
+
+
+    def place_name=(name)
+      @place_name = name
+      attribute_will_change!(:place_name)
     end
 
 

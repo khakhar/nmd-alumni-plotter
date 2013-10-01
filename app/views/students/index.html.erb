@@ -9,6 +9,12 @@
     <div class="panel-body">
       <h3><%= student.name %></h3>
       <%= student.place.try(:name_with_country) %>
+      <br/>
+      <% if student.approved? %>
+        <span class="label label-success">Approved</span>
+      <% else %>
+        <span class="label label-warning">Approved</span>
+      <% end %>
     </div>
     <div class="panel-footer">
       <%= link_to(

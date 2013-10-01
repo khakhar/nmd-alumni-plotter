@@ -1,3 +1,5 @@
 class Background < ActiveRecord::Base
-  has_many :students
+  has_many :student_backgrounds, inverse_of: :background
+
+  include Searchable
 end

@@ -1,0 +1,8 @@
+<div class="student-background nested-fields">
+  <div class="form-group ">
+    <i class="glyphicon glyphicon-stop handle" style="cursor: pointer"></i>
+    <%= f.text_field :background_name, class: "background_name", autocomplete: "off", spellcheck: "off" %>
+    <%= f.hidden_field :background_order, class: "background-order" %>
+    <%= link_to_remove_association "remove", f, class: "btn btn-danger btn-sm" %>
+  </div>
+</div>
