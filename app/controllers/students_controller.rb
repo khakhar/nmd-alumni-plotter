@@ -1,46 +1,43 @@
 class StudentsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :auth_user_or_guest!, only: [:create, :new]
+  before_action :authenticate_user!, except: [:create, :new]
   before_action :set_student, only: [:show, :edit, :update, :destroy]
 
 
-  # GET /students
-  # GET /students.json
   def index
     @students = Student.order(:name).page params[:page]
   end
 
-  # GET /students/1
-  # GET /students/1.json
   def show
   end
 
-  # GET /students/new
   def new
     @student = Student.new
   end
 
-  # GET /students/1/edit
   def edit
   end
 
-  # POST /students
-  # POST /students.json
-  def create
-    @student = Student.new(student_params)
 
-    respond_to do |format|
-      if @student.save
-        format.html { redirect_to @student, notice: 'Student was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @student }
+  def create
+    student_attributes = student_params
+    student_attributes.merge!(approved: false) if @invite
+
+    @student = Student.new(student_attributes)
+
+    if @student.save
+      @invite.filled_for!(@student.id) if @invite
+      if @invite
+        render 'thank_you'
       else
-        format.html { render action: 'new' }
-        format.json { render json: @student.errors, status: :unprocessable_entity }
+        redirect_to @student, notice: 'Student was successfully created.'
       end
+    else
+      render action: 'new'
     end
   end
 
-  # PATCH/PUT /students/1
-  # PATCH/PUT /students/1.json
+
   def update
     @student.place_name = params[:student][:place_name]
     respond_to do |format|
@@ -54,8 +51,7 @@ class StudentsController < ApplicationController
     end
   end
 
-  # DELETE /students/1
-  # DELETE /students/1.json
+
   def destroy
     @student.destroy
     respond_to do |format|
@@ -64,22 +60,21 @@ class StudentsController < ApplicationController
     end 
   end
 
+
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_student
       @student = Student.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+
     def student_params
-      params.require(:student).permit(
+      permitted_params = [
         :id,
         :name,
         :place_name,
         :website,
         :place_id,
         :expertise_area_id,
-        :approved,
         student_backgrounds_attributes: [:id, :background_name, :background_order, :_destroy],
         work_places_attributes: [
           :id,
@@ -90,6 +85,9 @@ class StudentsController < ApplicationController
           :current,
           :_destroy
         ]
-      )
+      ]
+
+      permitted_params.push(:approved) if !@invite
+      params.require(:student).permit(*permitted_params)
     end
 end

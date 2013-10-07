@@ -1,5 +1,7 @@
 class OrganisationsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!,  except: [:search]
+  before_action :auth_user_or_guest!,   only: [:search]
+
   before_action :set_organisation, only: [:show, :edit, :update, :destroy]
 
 

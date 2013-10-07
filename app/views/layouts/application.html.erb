@@ -15,6 +15,12 @@
     </style>
   <% end %>
 
+  <% if @invite %>
+    <script type="text/javascript">
+      var invite_token = "<%= @invite.token %>";
+    </script>
+  <% end %>
+
 </head>
 <body>
 
@@ -65,7 +71,7 @@
               <li>
                 <%= link_to "Logout", destroy_user_session_path, method: :delete %>
               </li>
-            <% else %>
+            <% elsif !@invite %>
               <li>
                 <%= link_to "Login", new_user_session_path %>
               </li>

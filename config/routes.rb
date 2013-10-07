@@ -12,8 +12,12 @@ NmdAlumni::Application.routes.draw do
   resources :engagement_types
 
   resources :student_invites do
+    member do
+      get :send_invite
+    end
     collection do
-      get :upload
+      get :send_invite
+      post :upload
       get :delete_multiple
     end
   end

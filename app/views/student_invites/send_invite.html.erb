@@ -1,0 +1,23 @@
+
+
+<% if @data.keys.count == 0 %>
+  <div class="alert alert-warning">No invites were sent. Maybe everybody has already been sent an email?</div>
+<% else %>
+  <div class="alert alert-success">Email invites successfully sent</div>
+  <hr/>
+
+  <table class="table">
+    <thead>
+      <th>Email</th>
+    </thead>
+
+    <tbody>
+      <% @data.keys.each do |email| %>
+        <tr>
+          <td><%= email %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% end %>

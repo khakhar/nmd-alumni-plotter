@@ -10,6 +10,8 @@ gem 'kaminari'
 gem 'cocoon'
 gem 'geocoder'
 gem 'faker'
+gem 'rest-client'
+
 gem 'carmen-rails', '~> 1.0.0', github: 'jim/carmen-rails'
 gem 'jquery-ui-rails'
 
@@ -35,6 +37,9 @@ gem 'jquery-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
+gem 'debugger', group: [:development, :test]
+
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -49,5 +54,3 @@ end
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]

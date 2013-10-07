@@ -1,0 +1,43 @@
+<h2>CSV invite import</h2>
+<hr/>
+
+<% if @csv_error %>
+  <div class="alert alert-danger">
+    <h4>Oops something went wrong</h4>
+    <% if @no_file %>
+      <p>Please upload a file to import from :)</p>
+    <% else %>
+      <p>If you uploaded a CSV, some invites might have been imported (check below).</p>
+    <% end %>
+  </div>
+<% else %>
+  <div class="alert alert-success">
+    <h4>Shiny... shiny...</h4>
+    <p>Invites have been imported successfully</p>
+  </div>
+<% end %>
+
+
+<% if @invites.count > 0 %>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @invites.each do |invite| %>
+        <tr>
+          <td><%= invite[:name] %></td>
+          <td><%= invite[:email] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <% unless @no_file %>
+    <h2>No invites were imported ~!</h2>
+  <% end %>
+<% end %>

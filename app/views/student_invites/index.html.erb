@@ -1,11 +1,21 @@
 <h1>
   Student invites
   <div class="pull-right">
+    <%= link_to 'Send pending invites', send_invite_student_invites_path(whom: "not-sent"), class: "btn btn-success" %>
     <%= link_to 'Add student invite', new_student_invite_path, class: "btn btn-success" %>
     <%= link_to 'Delete only used invites', delete_multiple_student_invites_path(delete_option: "expired"), class: "btn btn-danger", confirm: "Do you really want to delete USED invites?" %>
     <%= link_to 'Delete all', delete_multiple_student_invites_path(delete_option: "all"), class: "btn btn-danger", confirm: "Do you really want to delete ALL invites?" %>
   </div>
 </h1>
+
+<div class="well well-sm">
+<%= form_tag upload_student_invites_path, multipart: true do %>
+  <p>
+    <label for="file">Upload CSV: </label> <%= file_field_tag "csv_file", style: "display: inline;" %>
+  </p>
+  <%= submit_tag "Upload", class: "btn btn-primary btn-sm" %>
+<% end %>
+</div>
 <hr/>
 
 <% if @student_invites.count > 0 %>
@@ -13,16 +23,24 @@
     <div class="well well-sm">
       <h3><%= student_invite.name %>, <%= student_invite.email %></h3>
       <p>
-        <% if student_invite.student_id.blank? %>
-          Not yet filled
+        <% if !student_invite.sent? %>
+          <span class="label label-default">Invite not sent</span>
+        <% elsif student_invite.sent? && !student_invite.student_id.blank? %>
+          <span class="label label-success">Filled</span>
+          <%= link_to "View details filled", student_path(student_invite.student_id) %>
         <% else %>
-          <%= link_to "View filled invite", student_path(student_invite.student_id) %>
+          <span class="label label-danger">Not filled</span>
         <% end %>
       </p>
       <%= link_to(
             "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
             edit_student_invite_path(student_invite),
             class: "btn btn-primary btn-sm")
+      %>
+      <%= link_to(
+            "Resend invite",
+            send_invite_student_invite_path(student_invite),
+            class: "btn btn-warning btn-sm")
       %>
       <%= link_to(
             "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,

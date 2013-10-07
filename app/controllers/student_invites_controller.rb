@@ -1,12 +1,30 @@
 class StudentInvitesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_student_invite, only: [:show, :edit, :update, :destroy]
+  before_action :set_student_invite, only: [:show, :edit, :send, :update, :destroy]
 
   def index
     @student_invites = StudentInvite.order(:name)
   end
 
   def show
+  end
+
+
+  def send_invite
+    @data = {}
+    invites = []
+    if params[:whom] == "not-sent"
+      invites = StudentInvite.where(sent: false)
+    else
+      student_invite = StudentInvite.find_by(id: params[:id])
+      invites.push(student_invite) if student_invite
+    end
+
+    invites.each do |invite|
+      @data[invite.email] = {email: invite.email, token: invite.token}
+    end
+
+    StudentInvite.send_invites(@data)
   end
 
   def new
@@ -27,6 +45,33 @@ class StudentInvitesController < ApplicationController
         format.html { render action: 'new' }
         format.json { render json: @student_invite.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+
+  def upload
+    @invites = []
+
+    begin
+      uploaded_file = params[:csv_file]
+      csv_data = uploaded_file.read
+      csv = CSV.parse csv_data
+
+      csv.each do |row|
+        name  = row[0]
+        email = row[1]
+        unless email.blank?
+          invite = StudentInvite.find_or_initialize_by email: email
+          unless invite.persisted?
+            invite.name = name
+            invite.save
+            @invites.push({name: name, email: email})
+          end
+        end
+      end
+    rescue
+      @csv_error  = true
+      @no_file = true if params[:csv_file].blank?
     end
   end
 

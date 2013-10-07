@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131002014022) do
+ActiveRecord::Schema.define(version: 20131007053714) do
 
   create_table "backgrounds", force: true do |t|
     t.string   "name"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20131002014022) do
     t.integer  "student_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "sent",       default: false
   end
 
   create_table "students", force: true do |t|
