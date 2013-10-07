@@ -54,7 +54,7 @@ $(document).ready ()->
     initTypeAheads()
 
   $(".student-backgrounds").bind("sortstop", @onSortStop).bind("sortstart", @onSortStart)
-  $(".engagement_type_id").on 'change', onEngagementTypeChange
+  $(document).on "change", ".engagement_type_id", onEngagementTypeChange
   $(".engagement_type_id").each onEngagementTypeChange
 
 
