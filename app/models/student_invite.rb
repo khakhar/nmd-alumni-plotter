@@ -36,7 +36,7 @@ class StudentInvite < ActiveRecord::Base
 
 
   def self.mail_template
-    SiteOption.find_by! name: "invite_email_text"
+    SiteOption.find_by!(name: "invite_email_text").value
   end
 
 
