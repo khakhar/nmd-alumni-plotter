@@ -18,6 +18,3 @@ unless user.persisted?
 end
 
 site_option = SiteOption.find_or_create_by name: "invite_email_text"
-unless site_option.persisted?
-  site_option.save
-end

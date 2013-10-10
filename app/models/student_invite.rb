@@ -36,11 +36,7 @@ class StudentInvite < ActiveRecord::Base
 
 
   def self.mail_template
-    if Rails.env.development?
-      File.read(Rails.root.join("app", "views", "layouts", "invite.text"))
-    else
-      @mail_template ||= File.read(Rails.root.join("app", "views", "layouts", "invite.text"))
-    end
+    SiteOption.find_by! name: "invite_email_text"
   end
 
 
