@@ -10,4 +10,14 @@
   EngagementType.find_or_create_by name: name
 end
 
-User.find_or_create_by_email "admin@example.com", password: "password", role: "admin"
+user = User.find_or_create_by email: "admin@example.com"
+unless user.persisted?
+  user.password = "password"
+  user.role = "admin"
+  user.save
+end
+
+site_option = SiteOption.find_or_create_by name: "invite_email_text"
+unless site_option.persisted?
+  site_option.save
+end

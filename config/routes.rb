@@ -11,10 +11,18 @@ NmdAlumni::Application.routes.draw do
   resources :expertise_areas
   resources :engagement_types
 
+  resources :site_options, only: [] do
+    collection do
+      get :edit
+      put :update
+    end
+  end
+
   resources :student_invites do
     member do
       get :send_invite
     end
+
     collection do
       get :send_invite
       post :upload

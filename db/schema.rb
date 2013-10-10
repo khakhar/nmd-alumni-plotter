@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131007053714) do
+ActiveRecord::Schema.define(version: 20131010035636) do
 
   create_table "backgrounds", force: true do |t|
     t.string   "name"
@@ -45,6 +45,13 @@ ActiveRecord::Schema.define(version: 20131007053714) do
     t.string   "country_code"
     t.text     "latitude"
     t.text     "longitude"
+  end
+
+  create_table "site_options", force: true do |t|
+    t.string   "name"
+    t.text     "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "student_backgrounds", force: true do |t|

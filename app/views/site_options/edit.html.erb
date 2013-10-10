@@ -1,0 +1,34 @@
+<h2>Options</h2>
+<hr/>
+
+<%= form_tag site_options_path, :method => :put do %>
+
+  <% @site_options.each do |site_option| %>
+    <%= fields_for "site_options[]", site_option do |f| %>
+      <p>
+        <%= f.label :value, f.object.name.humanize %><br />
+        <%= f.text_area :value, rows: 10, cols: 60 %>
+      </p>
+    <% end %>
+  <% end %>
+
+  <p>
+    <%= submit_tag "Save", class: "btn btn-primary" %>
+  </p>
+
+  <p>
+    Use the following variables:
+    <ul>
+      <li>
+        <code>%recipient.name%</code> - Name of the recipient
+      </li>
+
+      <li>
+        <code>%recipient.token%</code> - Invite token for the recipient
+      </li>
+    </ul>
+
+    For the invite url, copy-paste this text: <code>https://nmd-alumni.herokuapp.com/students/new?invite_token=%recipient.token%</code>
+  </p>
+
+<% end %>
