@@ -4,7 +4,7 @@ class NmdPlot.Map
     worldZoomLevel: 2
     indiaCenter:    new L.LatLng(21.759499730719817, 90.263671875)
     indiaZoomLevel: 5
-    view: "india"
+    viewLevel: "india"
     cloudMade:
       apiKey:  "fe1dbd920bce412faf852270ad2ee911"
       styleId: "107987"
@@ -25,12 +25,13 @@ class NmdPlot.Map
 
   setIndiaView: ->
     @lmap.setView(@options.indiaCenter, @options.indiaZoomLevel)
-    @view = "india"
+    @viewLevel = "india"
 
 
   setWorldView: ->
     @lmap.setView(@options.worldCenter, @options.worldZoomLevel)
-    @view = "world"
+    @viewLevel = "world"
+
 
   onZoomend: ()=>
     if(@lmap.getZoom()>=5 && !@lmap.hasLayer(@placeLayer))

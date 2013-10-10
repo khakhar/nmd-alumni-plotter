@@ -5,13 +5,22 @@ class NmdPlot.View
 
 
   plot: (plotBy, filter=false, filterString="")=>
-    @geo.setIndiaView()
     $(".nav-list .items").empty()
     @geo.clear()
 
     if !filter
+      @geo.setIndiaView()
       @currentPlotter = new NmdPlot.Plotters[plotBy](@, @data)
       @currentPlotter.plot()
       $("#search").val("")
-    else 
+    else
+      # Force set world level to india, if full-plot is world
+      @geo.viewLevel = "india" if @geo.viewLevel == "world"
       @currentPlotter.plot(filter: true, filterString: filterString)
+
+      # If it's not changed, then set view to India
+      # If it's changed, then set the value back to world and move on
+      if @geo.viewLevel == "india"
+        @geo.setIndiaView()
+      else
+        @geo.viewLevel = "world"

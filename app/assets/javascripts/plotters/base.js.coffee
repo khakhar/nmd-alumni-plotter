@@ -42,7 +42,7 @@ class NmdPlot.Plotters.Base
 
   addMarkerForPlace: (placeId)->
     place = @getPlace(placeId)
-    if @view.geo.view == "india" && place.country_code!="IN"
+    if @view.geo.viewLevel == "india" && place.country_code!="IN"
       @view.geo.setWorldView()
 
     marker = @view.geo.createPlaceLabel(
