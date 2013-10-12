@@ -1,7 +1,7 @@
 class MainController < ApplicationController
   def index
     @expertise_areas = ExpertiseArea.order(:name).pluck(:name, :id)
-    @students = Student.includes(:expertise_area).load
+    @students = Student.where(approved: true).includes(:expertise_area)
     @organisations = Organisation.all
     @places = Place.all
     @backgrounds = Background.all
