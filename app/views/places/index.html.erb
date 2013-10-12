@@ -8,11 +8,18 @@
   <div class="well well-sm">
     <h3><%= place.name_with_country %></h3>
 
+    <p>
+      Native place for: <%= place.students.count %>
+      <br/>
+      Work place for: <%= place.work_places.count %>
+    </p>
+
     <%= link_to(
           "<span class='glyphicon glyphicon-edit'></span> Edit".html_safe,
           edit_place_path(place),
           class: "btn btn-primary btn-sm")
     %>
+
     <%= link_to(
           "<span class='glyphicon glyphicon-remove-circle'></span> Delete".html_safe,
           place,
