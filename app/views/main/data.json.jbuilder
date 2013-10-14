@@ -9,14 +9,14 @@ json.students do |json|
       json.set! :expertise_area_name, student.expertise_area.name
       json.set! :website,             student.full_url
 
-      json.set! :project_title,           student.internship.try(:project_title)
       json.set! :current_work_place_id,   student.current_work_place.try(:id)
       json.set! :current_organisation_id, student.current_work_place.try(:organisation_id)
       json.set! :current_place_id,        student.current_work_place.try(:place_id)
 
-      json.set! :internship_id,              student.internship.try(:id)
-      json.set! :internship_organisation_id, student.internship.try(:organisation_id)
-      json.set! :internship_place_id,        student.internship.try(:place_id)
+      json.set! :project_title,              student.diploma_project.try(:project_title)
+      json.set! :internship_id,              student.diploma_project.try(:id)
+      json.set! :internship_organisation_id, student.diploma_project.try(:organisation_id)
+      json.set! :internship_place_id,        student.diploma_project.try(:place_id)
     end
   end
 end

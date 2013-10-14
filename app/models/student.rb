@@ -25,8 +25,8 @@ class Student < ActiveRecord::Base
 
   paginates_per 50
 
-  def internship
-    self.work_places.where(engagement_type_id: EngagementType.internship).try(:first)
+  def diploma_project
+    self.work_places.where(engagement_type_id: EngagementType.diploma_project).try(:first)
   end
 
   def current_work_place
