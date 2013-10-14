@@ -37,7 +37,7 @@ $(document).ready ()->
 
   onEngagementTypeChange = ()->
     label = $(this).find('option:selected').text()
-    if label.match(new RegExp("internship", "ig"))
+    if label.match(new RegExp("diploma", "ig"))
       $(this).parents('.work-place').find('.project-title-wrapper').show()
     else
       $(this).parents('.work-place').find('.project-title-wrapper').hide()
