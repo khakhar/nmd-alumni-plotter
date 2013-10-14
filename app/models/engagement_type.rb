@@ -5,6 +5,10 @@ class EngagementType < ActiveRecord::Base
     EngagementType.find_by_name!("Internship")
   end
 
+  def self.diploma_project
+    EngagementType.find_by_name!("Diploma Project")
+  end
+
   def self.job
     EngagementType.find_by_name!("Job")
   end
