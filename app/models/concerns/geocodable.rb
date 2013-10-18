@@ -20,7 +20,7 @@ module Geocodable
 
       self.latitude     = data[0].latitude
       self.longitude    = data[0].longitude
-      self.country_code = data[0].country_code
+      self.country_code = data[0].country_code if !self.country_code
     rescue => e
       return false
     end
